@@ -54,10 +54,6 @@ jar {
     appendix "mc" + minecraft.version
 }
 
-sourceJar {
-    appendix "mc" + minecraft.version
-}
-
 uploadArchives {
     repositories {
         mavenDeployer {
