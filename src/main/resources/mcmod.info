@@ -1,0 +1,16 @@
+[
+{
+  "modid": "gravelminer",
+  "name": "GravelMiner",
+  "description": "Automatically mines falling gravel blocks that get in your way.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://balyware.com",
+  "updateUrl": "",
+  "authorList": ["BlayTheNinth"],
+  "credits": "BlayTheNinth",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]

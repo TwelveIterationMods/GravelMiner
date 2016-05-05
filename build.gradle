@@ -1,0 +1,83 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.1-SNAPSHOT'
+    }
+}
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven'
+
+def BUILD_NUMBER = System.getenv("BUILD_NUMBER") ?: "0"
+def MAVEN_REPO = System.getenv("MAVEN_REPO") ?: ""
+def MAVEN_USERNAME = System.getenv("MAVEN_USERNAME") ?: ""
+def MAVEN_PASSWORD = System.getenv("MAVEN_PASSWORD") ?: ""
+
+version = "2.0." + BUILD_NUMBER
+group = "net.blay09.mods"
+archivesBaseName = "GravelMiner"
+
+minecraft {
+    version = "1.8.9-11.15.1.1875"
+    runDir = "run"
+
+    mappings = "stable_20"
+}
+
+dependencies {
+}
+
+processResources {
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
+    from(sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+                
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+        
+    from(sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+
+jar {
+    appendix "mc" + minecraft.version
+}
+
+sourceJar {
+    appendix "mc" + minecraft.version
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: MAVEN_REPO) {
+                authentication(userName: MAVEN_USERNAME, password: MAVEN_PASSWORD)
+            }
+
+            pom {
+                groupId = project.group
+                version = project.version
+                artifactId = project.archivesBaseName
+            }
+
+            pom.withXml {
+                asNode().dependencies.dependency.findAll {
+                    it.scope.text() == "compile"
+                }.each {
+                    if(it.optional)
+                        it.optional.value = 'true'
+                    else
+                        it.appendNode('optional', 'true');
+                }
+            }
+        }
+    }
+}
