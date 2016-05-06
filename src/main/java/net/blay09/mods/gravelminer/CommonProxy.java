@@ -4,6 +4,7 @@ import net.blay09.mods.gravelminer.net.MessageHello;
 import net.blay09.mods.gravelminer.net.NetworkHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketEffect;
@@ -38,6 +39,9 @@ public class CommonProxy {
 
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
+		if (GravelMiner.TEST_CLIENT_SIDE) {
+			return;
+		}
 		if (event.getPlayer() instanceof FakePlayer || !GravelMiner.isEnabledFor(event.getPlayer())) {
 			return;
 		}
@@ -46,7 +50,7 @@ public class CommonProxy {
 		}
 		final int maxCount = 256;
 		for (int y = event.getPos().getY() + 1; y < 256; y++) {
-			if(y > event.getPos().getY() + maxCount) {
+			if (y > event.getPos().getY() + maxCount) {
 				return;
 			}
 			BlockPos posAbove = new BlockPos(event.getPos().getX(), y, event.getPos().getZ());
@@ -56,21 +60,21 @@ public class CommonProxy {
 			}
 			BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(event.getWorld(), posAbove, stateAbove, event.getPlayer());
 			MinecraftForge.EVENT_BUS.post(breakEvent);
-			if(breakEvent.isCanceled()) {
+			if (breakEvent.isCanceled()) {
 				return;
 			}
 			event.getWorld().playAuxSFXAtEntity(event.getPlayer(), 2001, posAbove, Block.getStateId(stateAbove));
 			SPacketEffect packet = new SPacketEffect(2001, posAbove, Block.getStateId(stateAbove), false);
 			final int range = 20;
-			for(Object obj : event.getWorld().getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(event.getPos().getX() - range, y - range, event.getPos().getZ() - range, event.getPos().getX() + range, y + range, event.getPos().getZ() + range))) {
-				((EntityPlayerMP) obj).playerNetServerHandler.sendPacket(packet);
+			for (Entity entity : event.getWorld().getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(event.getPos().getX() - range, y - range, event.getPos().getZ() - range, event.getPos().getX() + range, y + range, event.getPos().getZ() + range))) {
+				((EntityPlayerMP) entity).playerNetServerHandler.sendPacket(packet);
 			}
 			stateAbove.getBlock().onBlockHarvested(event.getWorld(), posAbove, stateAbove, event.getPlayer());
 			boolean removedByPlayer = stateAbove.getBlock().removedByPlayer(stateAbove, event.getWorld(), posAbove, event.getPlayer(), true);
 			if (!removedByPlayer) {
 				return;
 			}
-			if(!event.getPlayer().capabilities.isCreativeMode) {
+			if (!event.getPlayer().capabilities.isCreativeMode) {
 				stateAbove.getBlock().onBlockDestroyedByPlayer(event.getWorld(), posAbove, stateAbove);
 				stateAbove.getBlock().harvestBlock(event.getWorld(), event.getPlayer(), posAbove, stateAbove, event.getWorld().getTileEntity(posAbove), null);
 			}

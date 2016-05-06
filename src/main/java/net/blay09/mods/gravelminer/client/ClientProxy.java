@@ -1,5 +1,6 @@
 package net.blay09.mods.gravelminer.client;
 
+import com.google.common.collect.Sets;
 import net.blay09.mods.gravelminer.CommonProxy;
 import net.blay09.mods.gravelminer.GravelMiner;
 import net.minecraft.client.Minecraft;
@@ -23,15 +24,43 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 
+import java.util.Iterator;
+import java.util.Set;
+
 public class ClientProxy extends CommonProxy {
+
+	public static class GravelKiller {
+		public final BlockPos torchPos;
+		public int placeTorchDelayTicks;
+		public int gravelAboveTimeout;
+
+		public GravelKiller(BlockPos torchPos) {
+			this.torchPos = new BlockPos(torchPos);
+			placeTorchDelayTicks = GravelMiner.getTorchDelay();
+			gravelAboveTimeout = 20;
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (o == null || getClass() != o.getClass()) return false;
+
+			GravelKiller that = (GravelKiller) o;
+			return torchPos.equals(that.torchPos);
+		}
+
+		@Override
+		public int hashCode() {
+			return torchPos.hashCode();
+		}
+	}
 
 	private static final int HELLO_TIMEOUT = 20 * 10;
 	private int helloTimeout;
 	private boolean isServerSide;
 
-	private boolean isBreaking;
-	private BlockPos breakingPos;
-	private BlockPos torchPos;
+	private BlockPos lastBreakingPos;
+	private final Set<GravelKiller> gravelKillerList = Sets.newHashSet();
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -55,35 +84,62 @@ public class ClientProxy extends CommonProxy {
 					entityPlayer.addChatMessage(new TextComponentString("This server does not have GravelMiner installed. Using client-only implementation."));
 				}
 			}
-			if(!isServerSide) {
+			if(!isServerSide || GravelMiner.TEST_CLIENT_SIDE) {
 				WorldClient world = Minecraft.getMinecraft().theWorld;
-				if(breakingPos != null) {
-					if (world.getEntitiesWithinAABB(EntityFallingBlock.class, new AxisAlignedBB(breakingPos.getX(), breakingPos.getY(), breakingPos.getZ(), breakingPos.getX() + 1, breakingPos.getY() + 2, breakingPos.getZ() + 1)).size() > 0) {
-						if (isBreaking) {
+				if(lastBreakingPos != null && world.isAirBlock(lastBreakingPos) && GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos.up()))) {
+					gravelKillerList.add(new GravelKiller(lastBreakingPos));
+					lastBreakingPos = null;
+				}
+				System.out.println(gravelKillerList.size());
+				Iterator<GravelKiller> it = gravelKillerList.iterator();
+				while(it.hasNext()) {
+					GravelKiller gravelKiller = it.next();
+					// Place the torch after a short delay to allow for the gravel to start falling
+					if(gravelKiller.placeTorchDelayTicks > 0) {
+						gravelKiller.placeTorchDelayTicks--;
+						if(gravelKiller.placeTorchDelayTicks <= 0) {
 							if(GravelMiner.isTorchItem(entityPlayer.getHeldItemOffhand())) {
-								Minecraft.getMinecraft().playerController.processRightClickBlock(entityPlayer, world, entityPlayer.getHeldItemOffhand(), breakingPos, EnumFacing.UP, new Vec3d(0.5, 0.5, 0.5), EnumHand.OFF_HAND);
-								isBreaking = false;
-								torchPos = new BlockPos(breakingPos);
+								Minecraft.getMinecraft().playerController.processRightClickBlock(entityPlayer, world, entityPlayer.getHeldItemOffhand(), gravelKiller.torchPos, EnumFacing.UP, new Vec3d(0.5, 0.5, 0.5), EnumHand.OFF_HAND);
 							} else {
 								for (int i = 0; i < InventoryPlayer.getHotbarSize(); i++) {
 									ItemStack hotbarStack = entityPlayer.inventory.mainInventory[i];
 									if (GravelMiner.isTorchItem(hotbarStack)) {
 										int old = entityPlayer.inventory.currentItem;
 										entityPlayer.inventory.currentItem = i;
-										Minecraft.getMinecraft().playerController.processRightClickBlock(entityPlayer, world, hotbarStack, breakingPos, EnumFacing.UP, new Vec3d(0.5, 0.5, 0.5), EnumHand.MAIN_HAND);
+										Minecraft.getMinecraft().playerController.processRightClickBlock(entityPlayer, world, hotbarStack, gravelKiller.torchPos, EnumFacing.UP, new Vec3d(0.5, 0.5, 0.5), EnumHand.MAIN_HAND);
 										entityPlayer.inventory.currentItem = old;
-										isBreaking = false;
-										torchPos = new BlockPos(breakingPos);
 										break;
 									}
 								}
 							}
 						}
-					} else if (torchPos != null) {
-						if (GravelMiner.isTorchBlock(world.getBlockState(torchPos))) {
-							Minecraft.getMinecraft().getNetHandler().addToSendQueue(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, torchPos, EnumFacing.UP));
+					} else if(!GravelMiner.isGravelBlock(world.getBlockState(gravelKiller.torchPos.up()))) {
+						if(world.getEntitiesWithinAABB(EntityFallingBlock.class, new AxisAlignedBB(gravelKiller.torchPos.getX(), gravelKiller.torchPos.getY(), gravelKiller.torchPos.getZ(), gravelKiller.torchPos.getX() + 1, gravelKiller.torchPos.getY() + 2, gravelKiller.torchPos.getZ() + 1)).size() == 0) {
+							// Looks like all gravel has fallen...
+							if (GravelMiner.isTorchBlock(world.getBlockState(gravelKiller.torchPos))) {
+								// ...so break the torch!
+								Minecraft.getMinecraft().getNetHandler().addToSendQueue(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
+							} else if (GravelMiner.isGravelBlock(world.getBlockState(gravelKiller.torchPos))) {
+								// It seems the gravel fell before the place was torch, which means it was placed too late
+								// Can't easily re-do in this case, but fix up the delay for next time
+								GravelMiner.increaseTorchDelay(-1);
+							}
+							it.remove();
 						}
-						torchPos = null;
+					} else {
+						gravelKiller.gravelAboveTimeout--;
+						if(gravelKiller.gravelAboveTimeout <= 0) {
+							// It looks like the gravel got stuck on top of the torch, which means it was placed too early
+							GravelMiner.increaseTorchDelay(1);
+							it.remove();
+							// Break the torch and try again with new delay
+							if (GravelMiner.isTorchBlock(world.getBlockState(gravelKiller.torchPos))) {
+								Minecraft.getMinecraft().getNetHandler().addToSendQueue(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
+								if(GravelMiner.isGravelBlock(world.getBlockState(gravelKiller.torchPos.up()))) {
+									gravelKillerList.add(new GravelKiller(gravelKiller.torchPos));
+								}
+							}
+						}
 					}
 				}
 			}
@@ -92,8 +148,7 @@ public class ClientProxy extends CommonProxy {
 
 	@SubscribeEvent
 	public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-		isBreaking = true;
-		breakingPos = new BlockPos(event.getPos());
+		lastBreakingPos = event.getPos();
 	}
 
 	@Override
