@@ -93,7 +93,6 @@ public class ClientProxy extends CommonProxy {
 					gravelKillerList.add(new GravelKiller(lastBreakingPos));
 					lastBreakingPos = null;
 				}
-				System.out.println(gravelKillerList.size());
 				Iterator<GravelKiller> it = gravelKillerList.iterator();
 				while(it.hasNext()) {
 					GravelKiller gravelKiller = it.next();
