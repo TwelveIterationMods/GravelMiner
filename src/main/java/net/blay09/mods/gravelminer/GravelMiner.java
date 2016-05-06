@@ -22,7 +22,7 @@ import java.util.UUID;
 public class GravelMiner {
 
 	public static final String MOD_ID = "gravelminer";
-	public static final boolean TEST_CLIENT_SIDE = true;
+	public static final boolean TEST_CLIENT_SIDE = false;
 
 	@Mod.Instance
 	public static GravelMiner instance;
