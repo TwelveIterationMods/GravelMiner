@@ -37,6 +37,9 @@ public class CommonProxy {
 
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
+		if(GravelMiner.TEST_CLIENT_SIDE) {
+			return;
+		}
 		if (event.getPlayer() instanceof FakePlayer || !GravelMiner.isEnabledFor(event.getPlayer())) {
 			return;
 		}
