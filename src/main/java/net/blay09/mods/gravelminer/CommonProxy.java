@@ -38,6 +38,9 @@ public class CommonProxy {
 
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
+		if (GravelMiner.TEST_CLIENT_SIDE) {
+			return;
+		}
 		if (event.getPlayer() instanceof FakePlayer || !GravelMiner.isEnabledFor(event.getPlayer())) {
 			return;
 		}
@@ -46,7 +49,7 @@ public class CommonProxy {
 		}
 		final int maxCount = 256;
 		for (int y = event.pos.getY() + 1; y < 256; y++) {
-			if(y > event.pos.getY() + maxCount) {
+			if (y > event.pos.getY() + maxCount) {
 				return;
 			}
 			BlockPos posAbove = new BlockPos(event.pos.getX(), y, event.pos.getZ());
@@ -56,13 +59,13 @@ public class CommonProxy {
 			}
 			BlockEvent.BreakEvent breakEvent = new BlockEvent.BreakEvent(event.world, posAbove, stateAbove, event.getPlayer());
 			MinecraftForge.EVENT_BUS.post(breakEvent);
-			if(breakEvent.isCanceled()) {
+			if (breakEvent.isCanceled()) {
 				return;
 			}
 			event.world.playAuxSFXAtEntity(event.getPlayer(), 2001, posAbove, Block.getStateId(stateAbove));
 			S28PacketEffect packet = new S28PacketEffect(2001, posAbove, Block.getStateId(stateAbove), false);
 			final int range = 20;
-			for(Object obj : event.world.getEntitiesWithinAABB(EntityPlayerMP.class, AxisAlignedBB.fromBounds(event.pos.getX() - range, y - range, event.pos.getZ() - range, event.pos.getX() + range, y + range, event.pos.getZ() + range))) {
+			for (Object obj : event.world.getEntitiesWithinAABB(EntityPlayerMP.class, AxisAlignedBB.fromBounds(event.pos.getX() - range, y - range, event.pos.getZ() - range, event.pos.getX() + range, y + range, event.pos.getZ() + range))) {
 				((EntityPlayerMP) obj).playerNetServerHandler.sendPacket(packet);
 			}
 			stateAbove.getBlock().onBlockHarvested(event.world, posAbove, stateAbove, event.getPlayer());
@@ -70,7 +73,7 @@ public class CommonProxy {
 			if (!removedByPlayer) {
 				return;
 			}
-			if(!event.getPlayer().capabilities.isCreativeMode) {
+			if (!event.getPlayer().capabilities.isCreativeMode) {
 				stateAbove.getBlock().onBlockDestroyedByPlayer(event.world, posAbove, stateAbove);
 				stateAbove.getBlock().harvestBlock(event.world, event.getPlayer(), posAbove, stateAbove, event.world.getTileEntity(posAbove));
 			}
