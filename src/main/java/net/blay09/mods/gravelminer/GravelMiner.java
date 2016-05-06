@@ -56,6 +56,7 @@ public class GravelMiner {
 		isOptIn = config.getBoolean("Is Opt In", "general", true, "If set to true, GravelMiner will only be active for users who install the mod on their clients. (for use in servers)");
 		gravelBlocks = Lists.newArrayList(config.getStringList("Gravel Blocks", "general", new String[]{"minecraft:gravel"}, "Blocks that will fall and break into items when hitting a non-solid block. Format: modid:name"));
 		torchItems = Lists.newArrayList(config.getStringList("Torch Items", "general", new String[]{"minecraft:torch"}, "Blocks that are non-solid and can be destroyed in a single hit. Format: modid:name (for use on clients)"));
+		torchDelay = config.getInt("Torch Delay", "general", 8, 2, 20, TORCH_DELAY_COMMENT);
 		if (config.hasChanged()) {
 			config.save();
 		}
