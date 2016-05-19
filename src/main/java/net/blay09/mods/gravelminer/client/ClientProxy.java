@@ -117,7 +117,7 @@ public class ClientProxy extends CommonProxy {
 							// Looks like all gravel has fallen...
 							if (GravelMiner.isTorchBlock(world.getBlockState(gravelKiller.torchPos))) {
 								// ...so break the torch!
-								Minecraft.getMinecraft().getNetHandler().addToSendQueue(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
+								Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
 							} else if (GravelMiner.isGravelBlock(world.getBlockState(gravelKiller.torchPos))) {
 								// It seems the gravel fell before the place was torch, which means it was placed too late
 								// Can't easily re-do in this case, but fix up the delay for next time
@@ -133,7 +133,7 @@ public class ClientProxy extends CommonProxy {
 							it.remove();
 							// Break the torch and try again with new delay
 							if (GravelMiner.isTorchBlock(world.getBlockState(gravelKiller.torchPos))) {
-								Minecraft.getMinecraft().getNetHandler().addToSendQueue(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
+								Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
 								if(GravelMiner.isGravelBlock(world.getBlockState(gravelKiller.torchPos.up()))) {
 									gravelKillerList.add(new GravelKiller(gravelKiller.torchPos));
 								}

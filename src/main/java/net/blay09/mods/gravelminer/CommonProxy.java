@@ -63,11 +63,11 @@ public class CommonProxy {
 			if (breakEvent.isCanceled()) {
 				return;
 			}
-			event.getWorld().playAuxSFXAtEntity(event.getPlayer(), 2001, posAbove, Block.getStateId(stateAbove));
+			event.getWorld().playEvent(event.getPlayer(), 2001, posAbove, Block.getStateId(stateAbove));
 			SPacketEffect packet = new SPacketEffect(2001, posAbove, Block.getStateId(stateAbove), false);
 			final int range = 20;
 			for (Entity entity : event.getWorld().getEntitiesWithinAABB(EntityPlayerMP.class, new AxisAlignedBB(event.getPos().getX() - range, y - range, event.getPos().getZ() - range, event.getPos().getX() + range, y + range, event.getPos().getZ() + range))) {
-				((EntityPlayerMP) entity).playerNetServerHandler.sendPacket(packet);
+				((EntityPlayerMP) entity).connection.sendPacket(packet);
 			}
 			stateAbove.getBlock().onBlockHarvested(event.getWorld(), posAbove, stateAbove, event.getPlayer());
 			boolean removedByPlayer = stateAbove.getBlock().removedByPlayer(stateAbove, event.getWorld(), posAbove, event.getPlayer(), true);
