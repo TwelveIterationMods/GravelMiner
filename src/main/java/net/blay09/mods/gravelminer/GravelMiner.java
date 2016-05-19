@@ -18,7 +18,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-@Mod(modid = GravelMiner.MOD_ID, name = "GravelMiner", acceptableRemoteVersions = "*", guiFactory = "net.blay09.mods.gravelminer.client.GuiFactory")
+@Mod(modid = GravelMiner.MOD_ID, name = "GravelMiner", acceptableRemoteVersions = "*",
+		guiFactory = "net.blay09.mods.gravelminer.client.GuiFactory",
+		updateJSON = "http://balyware.com/new/forge_update.php?modid=gravelminer")
 public class GravelMiner {
 
 	public static final String MOD_ID = "gravelminer";
