@@ -13,8 +13,11 @@ public class HandlerHello implements IMessageHandler<MessageHello, IMessage> {
 			@Override
 			public void run() {
 				GravelMiner.proxy.receivedHello(ctx.side == Side.SERVER ? ctx.getServerHandler().playerEntity : null);
+				if(ctx.side == Side.CLIENT) {
+					NetworkHandler.instance.sendToServer(new MessageHello());
+				}
 			}
 		});
-		return ctx.side == Side.CLIENT ? new MessageHello() : null;
+		return null;
 	}
 }
