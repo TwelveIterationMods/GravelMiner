@@ -145,6 +145,11 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
+	@Override
+	public void addScheduledTask(Runnable runnable) {
+		Minecraft.getMinecraft().addScheduledTask(runnable);
+	}
+
 	@SubscribeEvent
 	public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		lastBreakingPos = event.getPos();
