@@ -1,11 +1,8 @@
 package net.blay09.mods.gravelminer;
 
-import net.blay09.mods.gravelminer.net.MessageHello;
-import net.blay09.mods.gravelminer.net.NetworkHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.play.server.SPacketEffect;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -16,7 +13,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 public class CommonProxy {
 
