@@ -12,10 +12,9 @@ public class HandlerHello implements IMessageHandler<MessageHello, IMessage> {
 		GravelMiner.proxy.addScheduledTask(new Runnable() {
 			@Override
 			public void run() {
-				GravelMiner.proxy.receivedHello(ctx.side == Side.SERVER ? ctx.getServerHandler().playerEntity : null);
-				if(ctx.side == Side.CLIENT) {
-					NetworkHandler.instance.sendToServer(new MessageHello());
-				}
+			if(ctx.side == Side.SERVER) {
+				GravelMiner.enableFor(ctx.getServerHandler().playerEntity);
+			}
 			}
 		});
 		return null;

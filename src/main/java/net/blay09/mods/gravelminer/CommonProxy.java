@@ -28,15 +28,6 @@ public class CommonProxy {
 		FMLCommonHandler.instance().getMinecraftServerInstance().addScheduledTask(runnable);
 	}
 
-	public void receivedHello(EntityPlayer entityPlayer) {
-		GravelMiner.enableFor(entityPlayer);
-	}
-
-	@SubscribeEvent
-	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-		NetworkHandler.instance.sendTo(new MessageHello(), (EntityPlayerMP) event.player);
-	}
-
 	@SubscribeEvent
 	public void onBlockBreak(BlockEvent.BreakEvent event) {
 		if (GravelMiner.TEST_CLIENT_SIDE) {

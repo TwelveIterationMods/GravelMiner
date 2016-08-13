@@ -13,12 +13,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.network.NetworkCheckHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-@Mod(modid = GravelMiner.MOD_ID, name = "GravelMiner", acceptableRemoteVersions = "*",
+@Mod(modid = GravelMiner.MOD_ID, name = "GravelMiner", acceptedMinecraftVersions = "[1.10]",
 		guiFactory = "net.blay09.mods.gravelminer.client.GuiFactory",
 		updateJSON = "http://balyware.com/new/forge_update.php?modid=gravelminer")
 public class GravelMiner {
@@ -41,6 +44,8 @@ public class GravelMiner {
 	private static List<String> gravelBlocks;
 	private static List<String> torchItems;
 	private static int torchDelay;
+
+	public static boolean isServerInstalled;
 
 	@Mod.EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -71,6 +76,14 @@ public class GravelMiner {
 		}
 	}
 
+	@NetworkCheckHandler
+	public boolean checkNetwork(Map<String, String> map, Side side) {
+		if(side == Side.SERVER) {
+			isServerInstalled = map.containsKey(GravelMiner.MOD_ID);
+		}
+		return true;
+	}
+
 	public static boolean isEnabledFor(EntityPlayer entityPlayer) {
 		return !isOptIn || enabledUsers.contains(entityPlayer.getUniqueID());
 	}
@@ -80,6 +93,9 @@ public class GravelMiner {
 	}
 
 	public static boolean isGravelBlock(IBlockState state) {
+		if(state == null) {
+			return false;
+		}
 		return gravelBlocks.contains(state.getBlock().getRegistryName().toString());
 	}
 

@@ -3,6 +3,8 @@ package net.blay09.mods.gravelminer.client;
 import com.google.common.collect.Sets;
 import net.blay09.mods.gravelminer.CommonProxy;
 import net.blay09.mods.gravelminer.GravelMiner;
+import net.blay09.mods.gravelminer.net.MessageHello;
+import net.blay09.mods.gravelminer.net.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -16,7 +18,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -55,9 +59,7 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
-	private static final int HELLO_TIMEOUT = 20 * 10;
-	private int helloTimeout;
-	private boolean isServerSide;
+	private boolean sentMissingMessage;
 
 	private BlockPos lastBreakingPos;
 	private final Set<GravelKiller> gravelKillerList = Sets.newHashSet();
@@ -69,24 +71,23 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@SubscribeEvent
-	public void connectedToServer(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-		helloTimeout = HELLO_TIMEOUT;
-		isServerSide = false;
+	public void onClientJoin(EntityJoinWorldEvent event) {
+		if(GravelMiner.isServerInstalled && event.getEntity() == Minecraft.getMinecraft().thePlayer) {
+			NetworkHandler.instance.sendToServer(new MessageHello());
+		}
 	}
 
 	@SubscribeEvent
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 		if (entityPlayer != null) {
-			if (helloTimeout > 0) {
-				helloTimeout--;
-				if (helloTimeout <= 0 && !isServerSide) {
-					entityPlayer.addChatMessage(new TextComponentString("This server does not have GravelMiner installed. Using client-only implementation."));
-				}
+			if (!GravelMiner.isServerInstalled && !sentMissingMessage) {
+				entityPlayer.addChatMessage(new TextComponentTranslation("gravelminer.serverNotInstalled"));
+				sentMissingMessage = true;
 			}
-			if(!isServerSide || GravelMiner.TEST_CLIENT_SIDE) {
+			if(!GravelMiner.isServerInstalled || GravelMiner.TEST_CLIENT_SIDE) {
 				WorldClient world = Minecraft.getMinecraft().theWorld;
-				if(lastBreakingPos != null && world.isAirBlock(lastBreakingPos) && GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos.up()))) {
+				if(lastBreakingPos != null && world.isAirBlock(lastBreakingPos) && !GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos)) && GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos.up()))) {
 					gravelKillerList.add(new GravelKiller(lastBreakingPos));
 					lastBreakingPos = null;
 				}
@@ -155,10 +156,4 @@ public class ClientProxy extends CommonProxy {
 		lastBreakingPos = event.getPos();
 	}
 
-	@Override
-	public void receivedHello(EntityPlayer entityPlayer) {
-		super.receivedHello(Minecraft.getMinecraft().thePlayer);
-		helloTimeout = 0;
-		isServerSide = true;
-	}
 }
