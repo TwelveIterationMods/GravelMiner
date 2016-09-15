@@ -93,18 +93,15 @@ public class GravelMiner {
 	}
 
 	public static boolean isGravelBlock(IBlockState state) {
-		if(state == null) {
-			return false;
-		}
-		return gravelBlocks.contains(state.getBlock().getRegistryName().toString());
+		return !(state == null || state.getBlock().getRegistryName() == null) && gravelBlocks.contains(state.getBlock().getRegistryName().toString());
 	}
 
 	public static boolean isTorchBlock(IBlockState state) {
-		return torchItems.contains(state.getBlock().getRegistryName().toString());
+		return !(state == null || state.getBlock().getRegistryName() == null) && torchItems.contains(state.getBlock().getRegistryName().toString());
 	}
 
 	public static boolean isTorchItem(ItemStack itemStack) {
-		return itemStack != null && torchItems.contains(itemStack.getItem().getRegistryName().toString());
+		return !(itemStack == null || itemStack.getItem().getRegistryName() == null) && torchItems.contains(itemStack.getItem().getRegistryName().toString());
 	}
 
 	public static int getTorchDelay() {
