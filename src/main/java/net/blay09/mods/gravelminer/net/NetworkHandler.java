@@ -12,5 +12,6 @@ public class NetworkHandler {
 	public static void init() {
 		instance.registerMessage(HandlerHello.class, MessageHello.class, 0, Side.SERVER);
 		instance.registerMessage(HandlerHello.class, MessageHello.class, 1, Side.CLIENT);
+		instance.registerMessage(HandlerSetEnabled.class, MessageSetEnabled.class, 2, Side.SERVER);
 	}
 }

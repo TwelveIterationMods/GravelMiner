@@ -1,13 +1,16 @@
 package net.blay09.mods.gravelminer.client;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.blay09.mods.gravelminer.CommonProxy;
 import net.blay09.mods.gravelminer.GravelMiner;
 import net.blay09.mods.gravelminer.net.MessageHello;
+import net.blay09.mods.gravelminer.net.MessageSetEnabled;
 import net.blay09.mods.gravelminer.net.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,16 +22,23 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.client.settings.KeyConflictContext;
+import net.minecraftforge.client.settings.KeyModifier;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 public class ClientProxy extends CommonProxy {
@@ -63,6 +73,8 @@ public class ClientProxy extends CommonProxy {
 
 	private BlockPos lastBreakingPos;
 	private final Set<GravelKiller> gravelKillerList = Sets.newHashSet();
+	private final List<GravelKiller> tmpAddList = Lists.newArrayList();
+	private final KeyBinding keyToggle = new KeyBinding("key.gravelminer.toggle", KeyConflictContext.IN_GAME, KeyModifier.NONE, 0, "key.categories.gravelminer");
 
 	@Override
 	public void preInit(FMLPreInitializationEvent event) {
@@ -70,10 +82,27 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	@Override
+	public void init(FMLInitializationEvent event) {
+		ClientRegistry.registerKeyBinding(keyToggle);
+	}
+
 	@SubscribeEvent
 	public void onClientJoin(EntityJoinWorldEvent event) {
 		if(GravelMiner.isServerInstalled && event.getEntity() == Minecraft.getMinecraft().thePlayer) {
 			NetworkHandler.instance.sendToServer(new MessageHello());
+			NetworkHandler.instance.sendToServer(new MessageSetEnabled(GravelMiner.isEnabled()));
+		}
+	}
+
+	@SubscribeEvent
+	public void onKeyInput(InputEvent.KeyInputEvent event) {
+		if(Keyboard.getEventKeyState()) {
+			if(keyToggle.isActiveAndMatches(Keyboard.getEventKey())) {
+				boolean newEnabled = !GravelMiner.isEnabled();
+				GravelMiner.setEnabled(newEnabled);
+				Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentTranslation("gravelminer.toggle" + (newEnabled ? "On" : "Off")), 3);
+			}
 		}
 	}
 
@@ -85,9 +114,9 @@ public class ClientProxy extends CommonProxy {
 				entityPlayer.addChatMessage(new TextComponentTranslation("gravelminer.serverNotInstalled"));
 				sentMissingMessage = true;
 			}
-			if(!GravelMiner.isServerInstalled || GravelMiner.TEST_CLIENT_SIDE) {
+			if((!GravelMiner.isServerInstalled || GravelMiner.TEST_CLIENT_SIDE) && GravelMiner.isEnabled()) {
 				WorldClient world = Minecraft.getMinecraft().theWorld;
-				if(lastBreakingPos != null && world.isAirBlock(lastBreakingPos) && !GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos)) && GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos.up()))) {
+				if(lastBreakingPos != null && world.isAirBlock(lastBreakingPos) && GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos.up()))) {
 					gravelKillerList.add(new GravelKiller(lastBreakingPos));
 					lastBreakingPos = null;
 				}
@@ -136,11 +165,15 @@ public class ClientProxy extends CommonProxy {
 							if (GravelMiner.isTorchBlock(world.getBlockState(gravelKiller.torchPos))) {
 								Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
 								if(GravelMiner.isGravelBlock(world.getBlockState(gravelKiller.torchPos.up()))) {
-									gravelKillerList.add(new GravelKiller(gravelKiller.torchPos));
+									tmpAddList.add(new GravelKiller(gravelKiller.torchPos));
 								}
 							}
 						}
 					}
+				}
+				if(!tmpAddList.isEmpty()) {
+					gravelKillerList.addAll(tmpAddList);
+					tmpAddList.clear();
 				}
 			}
 		}
@@ -153,7 +186,9 @@ public class ClientProxy extends CommonProxy {
 
 	@SubscribeEvent
 	public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-		lastBreakingPos = event.getPos();
+		if(!GravelMiner.isGravelBlock(event.getState())) {
+			lastBreakingPos = event.getPos();
+		}
 	}
 
 }

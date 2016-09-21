@@ -4,17 +4,14 @@ import net.blay09.mods.gravelminer.GravelMiner;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
-public class HandlerHello implements IMessageHandler<MessageHello, IMessage> {
+public class HandlerSetEnabled implements IMessageHandler<MessageSetEnabled, IMessage> {
 	@Override
-	public IMessage onMessage(MessageHello message, final MessageContext ctx) {
+	public IMessage onMessage(final MessageSetEnabled message, final MessageContext ctx) {
 		GravelMiner.proxy.addScheduledTask(new Runnable() {
 			@Override
 			public void run() {
-				if (ctx.side == Side.SERVER) {
-					GravelMiner.setHasClientSide(ctx.getServerHandler().playerEntity);
-				}
+				GravelMiner.setHasEnabled(ctx.getServerHandler().playerEntity, message.isEnabled());
 			}
 		});
 		return null;
