@@ -68,10 +68,10 @@ public class CommonProxy {
 			}
 			if (!event.getPlayer().capabilities.isCreativeMode) {
 				stateAbove.getBlock().onBlockDestroyedByPlayer(event.getWorld(), posAbove, stateAbove);
-				if(GravelMiner.isRollFlintChance() || event.getState().getBlock() != Blocks.GRAVEL) {
+				if(GravelMiner.isRollFlintChance() || stateAbove.getBlock() != Blocks.GRAVEL) {
 					stateAbove.getBlock().harvestBlock(event.getWorld(), event.getPlayer(), posAbove, stateAbove, event.getWorld().getTileEntity(posAbove), null);
 				} else {
-					Block.spawnAsEntity(event.getWorld(), event.getPos(), new ItemStack(Blocks.GRAVEL, 1));
+					Block.spawnAsEntity(event.getWorld(), posAbove, new ItemStack(Blocks.GRAVEL, 1));
 				}
 			}
 		}
