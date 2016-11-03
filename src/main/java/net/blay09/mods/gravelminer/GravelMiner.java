@@ -49,6 +49,7 @@ public class GravelMiner {
 	private static List<String> torchItems;
 	private static int torchDelay;
 	private static boolean isEnabled;
+	private static boolean rollFlintChance;
 
 	public static boolean isServerInstalled;
 
@@ -70,9 +71,10 @@ public class GravelMiner {
 	}
 
 	private void reloadConfig() {
-		isOptIn = config.getBoolean("Is Opt In", "general", true, "If set to true, GravelMiner will only be active for users who install the mod on their clients. (for use in servers)");
+		isOptIn = config.getBoolean("Is Opt In", "general", true, "If set to true, GravelMiner will only be active for users who install the mod on their clients (for use in servers).");
 		gravelBlocks = Lists.newArrayList(config.getStringList("Gravel Blocks", "general", new String[]{"minecraft:gravel"}, "Blocks that will fall and break into items when hitting a non-solid block. Format: modid:name"));
 		torchItems = Lists.newArrayList(config.getStringList("Torch Items", "general", new String[]{"minecraft:torch"}, "Blocks that are non-solid and can be destroyed in a single hit. Format: modid:name (for use on clients)"));
+		rollFlintChance = config.getBoolean("Roll Flint Chance", "general", true, "If set to true, gravel mined via GravelMiner will have a chance of dropping as flint (server-side only).");
 		torchDelay = config.getInt("Torch Delay", "client", 8, 2, 20, TORCH_DELAY_COMMENT);
 		isEnabled = config.getBoolean("Is Enabled", "client", true, IS_ENABLED_COMMENT);
 		if (config.hasChanged()) {
@@ -153,5 +155,9 @@ public class GravelMiner {
 
 	public static boolean isEnabled() {
 		return isEnabled;
+	}
+
+	public static boolean isRollFlintChance() {
+		return rollFlintChance;
 	}
 }

@@ -4,6 +4,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -66,7 +69,11 @@ public abstract class CommonProxy {
 			}
 			if (!event.getPlayer().capabilities.isCreativeMode) {
 				stateAbove.getBlock().onBlockDestroyedByPlayer(event.getWorld(), posAbove, stateAbove);
-				stateAbove.getBlock().harvestBlock(event.getWorld(), event.getPlayer(), posAbove, stateAbove, event.getWorld().getTileEntity(posAbove), null);
+				if(GravelMiner.isRollFlintChance() || event.getState().getBlock() != Blocks.GRAVEL) {
+					stateAbove.getBlock().harvestBlock(event.getWorld(), event.getPlayer(), posAbove, stateAbove, event.getWorld().getTileEntity(posAbove), null);
+				} else {
+					Block.spawnAsEntity(event.getWorld(), event.getPos(), new ItemStack(Blocks.GRAVEL, 1));
+				}
 			}
 		}
 	}
