@@ -10,9 +10,9 @@ import net.blay09.mods.gravelminer.net.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.item.EntityFallingBlock;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -20,7 +20,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.client.settings.KeyModifier;
@@ -34,7 +33,6 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import org.lwjgl.input.Keyboard;
 
 import java.util.Iterator;
@@ -89,7 +87,7 @@ public class ClientProxy extends CommonProxy {
 
 	@SubscribeEvent
 	public void onClientJoin(EntityJoinWorldEvent event) {
-		if(GravelMiner.isServerInstalled && event.getEntity() == Minecraft.getMinecraft().thePlayer) {
+		if(GravelMiner.isServerInstalled && event.getEntity() == Minecraft.getMinecraft().player) {
 			NetworkHandler.instance.sendToServer(new MessageHello());
 			NetworkHandler.instance.sendToServer(new MessageSetEnabled(GravelMiner.isEnabled()));
 		}
@@ -115,7 +113,7 @@ public class ClientProxy extends CommonProxy {
 				sentMissingMessage = true;
 			}
 			if((!GravelMiner.isServerInstalled || GravelMiner.TEST_CLIENT_SIDE) && GravelMiner.isEnabled()) {
-				WorldClient world = Minecraft.getMinecraft().theWorld;
+				WorldClient world = Minecraft.getMinecraft().world;
 				if(lastBreakingPos != null && world.isAirBlock(lastBreakingPos) && GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos.up()))) {
 					gravelKillerList.add(new GravelKiller(lastBreakingPos));
 					lastBreakingPos = null;
@@ -128,14 +126,14 @@ public class ClientProxy extends CommonProxy {
 						gravelKiller.placeTorchDelayTicks--;
 						if(gravelKiller.placeTorchDelayTicks <= 0) {
 							if(GravelMiner.isTorchItem(entityPlayer.getHeldItemOffhand())) {
-								Minecraft.getMinecraft().playerController.processRightClickBlock(entityPlayer, world, entityPlayer.getHeldItemOffhand(), gravelKiller.torchPos, EnumFacing.UP, new Vec3d(0.5, 0.5, 0.5), EnumHand.OFF_HAND);
+								Minecraft.getMinecraft().playerController.processRightClickBlock(entityPlayer, world, gravelKiller.torchPos, EnumFacing.UP, new Vec3d(0.5, 0.5, 0.5), EnumHand.OFF_HAND);
 							} else {
 								for (int i = 0; i < InventoryPlayer.getHotbarSize(); i++) {
-									ItemStack hotbarStack = entityPlayer.inventory.mainInventory[i];
+									ItemStack hotbarStack = entityPlayer.inventory.mainInventory.get(i);
 									if (GravelMiner.isTorchItem(hotbarStack)) {
 										int old = entityPlayer.inventory.currentItem;
 										entityPlayer.inventory.currentItem = i;
-										Minecraft.getMinecraft().playerController.processRightClickBlock(entityPlayer, world, hotbarStack, gravelKiller.torchPos, EnumFacing.UP, new Vec3d(0.5, 0.5, 0.5), EnumHand.MAIN_HAND);
+										Minecraft.getMinecraft().playerController.processRightClickBlock(entityPlayer, world, gravelKiller.torchPos, EnumFacing.UP, new Vec3d(0.5, 0.5, 0.5), EnumHand.MAIN_HAND);
 										entityPlayer.inventory.currentItem = old;
 										break;
 									}
@@ -147,7 +145,10 @@ public class ClientProxy extends CommonProxy {
 							// Looks like all gravel has fallen...
 							if (GravelMiner.isTorchBlock(world.getBlockState(gravelKiller.torchPos))) {
 								// ...so break the torch!
-								Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
+								NetHandlerPlayClient connection = Minecraft.getMinecraft().getConnection();
+								if(connection != null) {
+									connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
+								}
 							} else if (GravelMiner.isGravelBlock(world.getBlockState(gravelKiller.torchPos))) {
 								// It seems the gravel fell before the place was torch, which means it was placed too late
 								// Can't easily re-do in this case, but fix up the delay for next time
@@ -163,7 +164,10 @@ public class ClientProxy extends CommonProxy {
 							it.remove();
 							// Break the torch and try again with new delay
 							if (GravelMiner.isTorchBlock(world.getBlockState(gravelKiller.torchPos))) {
-								Minecraft.getMinecraft().getConnection().sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
+								NetHandlerPlayClient connection = Minecraft.getMinecraft().getConnection();
+								if(connection != null) {
+									connection.sendPacket(new CPacketPlayerDigging(CPacketPlayerDigging.Action.STOP_DESTROY_BLOCK, gravelKiller.torchPos, EnumFacing.UP));
+								}
 								if(GravelMiner.isGravelBlock(world.getBlockState(gravelKiller.torchPos.up()))) {
 									tmpAddList.add(new GravelKiller(gravelKiller.torchPos));
 								}

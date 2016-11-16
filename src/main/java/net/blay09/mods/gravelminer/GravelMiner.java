@@ -23,9 +23,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-@Mod(modid = GravelMiner.MOD_ID, name = "GravelMiner", acceptedMinecraftVersions = "[1.10]",
-		guiFactory = "net.blay09.mods.gravelminer.client.GuiFactory",
-		updateJSON = "http://balyware.com/new/forge_update.php?modid=gravelminer")
+@Mod(modid = GravelMiner.MOD_ID, name = "GravelMiner", acceptedMinecraftVersions = "[1.11]",
+		guiFactory = "net.blay09.mods.gravelminer.client.GuiFactory")
 public class GravelMiner {
 
 	public static final String MOD_ID = "gravelminer";
