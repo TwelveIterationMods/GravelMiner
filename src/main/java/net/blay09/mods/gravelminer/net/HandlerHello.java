@@ -9,12 +9,9 @@ import net.minecraftforge.fml.relauncher.Side;
 public class HandlerHello implements IMessageHandler<MessageHello, IMessage> {
 	@Override
 	public IMessage onMessage(MessageHello message, final MessageContext ctx) {
-		GravelMiner.proxy.addScheduledTask(new Runnable() {
-			@Override
-			public void run() {
-				if (ctx.side == Side.SERVER) {
-					GravelMiner.setHasClientSide(ctx.getServerHandler().playerEntity);
-				}
+		GravelMiner.proxy.addScheduledTask(() -> {
+			if (ctx.side == Side.SERVER) {
+				GravelMiner.setHasClientSide(ctx.getServerHandler().player);
 			}
 		});
 		return null;

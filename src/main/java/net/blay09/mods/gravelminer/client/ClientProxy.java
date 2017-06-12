@@ -39,6 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+@SuppressWarnings("unused")
 public class ClientProxy extends CommonProxy {
 
 	public static class GravelKiller {
@@ -109,7 +110,7 @@ public class ClientProxy extends CommonProxy {
 		EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 		if (entityPlayer != null) {
 			if (!GravelMiner.isServerInstalled && !sentMissingMessage) {
-				entityPlayer.addChatMessage(new TextComponentTranslation("gravelminer.serverNotInstalled"));
+				entityPlayer.sendStatusMessage(new TextComponentTranslation("gravelminer.serverNotInstalled"), true);
 				sentMissingMessage = true;
 			}
 			if((!GravelMiner.isServerInstalled || GravelMiner.TEST_CLIENT_SIDE) && GravelMiner.isEnabled()) {
