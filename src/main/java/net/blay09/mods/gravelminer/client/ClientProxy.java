@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import net.blay09.mods.gravelminer.CommonProxy;
 import net.blay09.mods.gravelminer.GravelMiner;
+import net.blay09.mods.gravelminer.ModConfig;
 import net.blay09.mods.gravelminer.net.MessageHello;
 import net.blay09.mods.gravelminer.net.MessageSetEnabled;
 import net.blay09.mods.gravelminer.net.NetworkHandler;
@@ -49,7 +50,7 @@ public class ClientProxy extends CommonProxy {
 
 		public GravelKiller(BlockPos torchPos) {
 			this.torchPos = new BlockPos(torchPos);
-			placeTorchDelayTicks = GravelMiner.getTorchDelay();
+			placeTorchDelayTicks = ModConfig.client.torchDelay;
 			gravelAboveTimeout = 20;
 		}
 
@@ -90,7 +91,7 @@ public class ClientProxy extends CommonProxy {
 	public void onClientJoin(EntityJoinWorldEvent event) {
 		if(GravelMiner.isServerInstalled && event.getEntity() == Minecraft.getMinecraft().player) {
 			NetworkHandler.instance.sendToServer(new MessageHello());
-			NetworkHandler.instance.sendToServer(new MessageSetEnabled(GravelMiner.isEnabled()));
+			NetworkHandler.instance.sendToServer(new MessageSetEnabled(ModConfig.client.isEnabled));
 		}
 	}
 
@@ -98,7 +99,7 @@ public class ClientProxy extends CommonProxy {
 	public void onKeyInput(InputEvent.KeyInputEvent event) {
 		if(Keyboard.getEventKeyState()) {
 			if(keyToggle.isActiveAndMatches(Keyboard.getEventKey())) {
-				boolean newEnabled = !GravelMiner.isEnabled();
+				boolean newEnabled = !ModConfig.client.isEnabled;
 				GravelMiner.setEnabled(newEnabled);
 				Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentTranslation("gravelminer.toggle" + (newEnabled ? "On" : "Off")), 3);
 			}
@@ -113,7 +114,7 @@ public class ClientProxy extends CommonProxy {
 				entityPlayer.sendStatusMessage(new TextComponentTranslation("gravelminer.serverNotInstalled"), true);
 				sentMissingMessage = true;
 			}
-			if((!GravelMiner.isServerInstalled || GravelMiner.TEST_CLIENT_SIDE) && GravelMiner.isEnabled()) {
+			if((!GravelMiner.isServerInstalled || GravelMiner.TEST_CLIENT_SIDE) && ModConfig.client.isEnabled) {
 				WorldClient world = Minecraft.getMinecraft().world;
 				if(lastBreakingPos != null && world.isAirBlock(lastBreakingPos) && GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos.up()))) {
 					gravelKillerList.add(new GravelKiller(lastBreakingPos));
@@ -191,7 +192,7 @@ public class ClientProxy extends CommonProxy {
 
 	@SubscribeEvent
 	public void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-		if(!GravelMiner.isGravelBlock(event.getState())) {
+		if(ModConfig.triggerOnGravel || !GravelMiner.isGravelBlock(event.getState())) {
 			lastBreakingPos = event.getPos();
 		}
 	}
