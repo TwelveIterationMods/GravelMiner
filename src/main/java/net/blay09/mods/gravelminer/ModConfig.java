@@ -36,5 +36,9 @@ public class ModConfig {
 		@Config.Comment("The delay in client ticks before the torch should be placed after breaking a block below gravel. Increase if torch is placed too early, decrease if torch is placed too late. (for use on clients)")
 		@Config.RangeInt(min = 2, max = 20)
 		public int torchDelay = 8;
+
+		@Config.Name("Missing on Server Message")
+		@Config.Comment("Whether GravelMiner should notify the client if the server does not have GravelMiner installed")
+		public boolean missingOnServerMessage = true;
 	}
 }
