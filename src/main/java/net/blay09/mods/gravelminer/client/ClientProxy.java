@@ -110,7 +110,7 @@ public class ClientProxy extends CommonProxy {
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 		if (entityPlayer != null) {
-			if (!GravelMiner.isServerInstalled && !sentMissingMessage) {
+			if (ModConfig.client.missingOnServerMessage && !GravelMiner.isServerInstalled && !sentMissingMessage) {
 				entityPlayer.sendStatusMessage(new TextComponentTranslation("gravelminer.serverNotInstalled"), true);
 				sentMissingMessage = true;
 			}
