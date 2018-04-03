@@ -1,4 +1,3 @@
-gravelminer.serverNotInstalled=This server does not have GravelMiner installed. Using client-only implementation.
 gravelminer.toggleOn=GravelMiner: ON
 gravelminer.toggleOff=GravelMiner: OFF
 

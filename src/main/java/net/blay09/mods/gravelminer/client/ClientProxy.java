@@ -69,8 +69,6 @@ public class ClientProxy extends CommonProxy {
 		}
 	}
 
-	private boolean sentMissingMessage;
-
 	private BlockPos lastBreakingPos;
 	private final Set<GravelKiller> gravelKillerList = Sets.newHashSet();
 	private final List<GravelKiller> tmpAddList = Lists.newArrayList();
@@ -110,10 +108,6 @@ public class ClientProxy extends CommonProxy {
 	public void onClientTick(TickEvent.ClientTickEvent event) {
 		EntityPlayerSP entityPlayer = FMLClientHandler.instance().getClientPlayerEntity();
 		if (entityPlayer != null) {
-			if (!GravelMiner.isServerInstalled && !sentMissingMessage) {
-				entityPlayer.sendStatusMessage(new TextComponentTranslation("gravelminer.serverNotInstalled"), true);
-				sentMissingMessage = true;
-			}
 			if((!GravelMiner.isServerInstalled || GravelMiner.TEST_CLIENT_SIDE) && ModConfig.client.isEnabled) {
 				WorldClient world = Minecraft.getMinecraft().world;
 				if(lastBreakingPos != null && world.isAirBlock(lastBreakingPos) && GravelMiner.isGravelBlock(world.getBlockState(lastBreakingPos.up()))) {
