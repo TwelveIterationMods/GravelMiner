@@ -1,30 +1,36 @@
 package net.blay09.mods.gravelminer.net;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.blay09.mods.gravelminer.GravelMiner;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.PacketBuffer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageSetEnabled implements IMessage {
+import java.util.function.Supplier;
 
-	private boolean enabled;
+public class MessageSetEnabled {
 
-	public MessageSetEnabled() {
-	}
+    private final boolean enabled;
 
-	public MessageSetEnabled(boolean enabled) {
-		this.enabled = enabled;
-	}
+    public MessageSetEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 
-	@Override
-	public void fromBytes(ByteBuf buf) {
-		enabled = buf.readBoolean();
-	}
+    public static void encode(MessageSetEnabled message, PacketBuffer buf) {
+        buf.writeBoolean(message.enabled);
+    }
 
-	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeBoolean(enabled);
-	}
+    public static MessageSetEnabled decode(PacketBuffer buf) {
+        boolean enabled = buf.readBoolean();
+        return new MessageSetEnabled(enabled);
+    }
 
-	public boolean isEnabled() {
-		return enabled;
-	}
+    public static void handle(MessageSetEnabled message, Supplier<NetworkEvent.Context> contextSupplier) {
+        NetworkEvent.Context context = contextSupplier.get();
+        context.enqueueWork(() -> {
+            EntityPlayer player = context.getSender();
+            if (player != null) {
+                GravelMiner.setHasEnabled(player, message.enabled);
+            }
+        });
+    }
 }

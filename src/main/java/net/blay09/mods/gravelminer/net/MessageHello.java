@@ -1,16 +1,19 @@
 package net.blay09.mods.gravelminer.net;
 
-import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.blay09.mods.gravelminer.GravelMiner;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraftforge.fml.network.NetworkEvent;
 
-public class MessageHello implements IMessage {
-	@Override
-	public void fromBytes(ByteBuf buf) {
+import java.util.function.Supplier;
 
-	}
-
-	@Override
-	public void toBytes(ByteBuf buf) {
-
-	}
+public class MessageHello {
+    public static void handle(MessageHello message, Supplier<NetworkEvent.Context> contextSupplier) {
+        NetworkEvent.Context context = contextSupplier.get();
+        context.enqueueWork(() -> {
+            EntityPlayer player = context.getSender();
+            if (player != null) {
+                GravelMiner.setHasClientSide(player);
+            }
+        });
+    }
 }
