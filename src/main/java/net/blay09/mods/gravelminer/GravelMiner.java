@@ -33,8 +33,7 @@ public class GravelMiner {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::clientSetup);
 
-        // TODO Awaiting fix for COMMON in Forge
-//        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GravelMinerConfig.commonSpec);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, GravelMinerConfig.commonSpec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, GravelMinerConfig.clientSpec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, GravelMinerConfig.serverSpec);
 

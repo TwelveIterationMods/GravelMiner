@@ -60,11 +60,6 @@ public class GravelMinerConfig {
         public final ForgeConfigSpec.BooleanValue isEnabled;
         public final ForgeConfigSpec.IntValue torchDelay;
 
-        // TODO  // TODO Awaiting fix for COMMON in Forge:
-        public final ForgeConfigSpec.ConfigValue<List<String>> gravelBlocks;
-        public final ForgeConfigSpec.BooleanValue triggerOnGravel;
-        public final ForgeConfigSpec.ConfigValue<List<String>> torchItems;
-
         Client(ForgeConfigSpec.Builder builder) {
             builder.comment("Client only settings").push("client");
 
@@ -77,33 +72,16 @@ public class GravelMinerConfig {
                     .comment("The delay in client ticks before the torch should be placed after breaking a block below gravel. Increase if torch is placed too early, decrease if torch is placed too late. (for use on clients)")
                     .translation("gravelminer.config.torchDelay")
                     .defineInRange("torchDelay", 8, 2, 20);
-
-            // TODO Awaiting fix for COMMON in Forge:
-
-            gravelBlocks = builder
-                    .comment("Blocks that will fall and break into items when hitting a non-solid block. Format: modid:name")
-                    .translation("gravelminer.config.gravelBlocks")
-                    .define("gravelBlocks", Lists.newArrayList("minecraft:gravel"));
-
-            triggerOnGravel = builder
-                    .comment("If set to true, the mod will trigger when mining gravel as well, instead of only when mining a non-gravel block below gravel.")
-                    .translation("gravelminer.config.triggerOnGravel")
-                    .define("triggerOnGravel", true);
-
-            torchItems = builder
-                    .comment("Blocks that are non-solid and can be destroyed in a single hit. Format: modid:name (for use on clients)")
-                    .translation("gravelminer.config.gravelBlocks")
-                    .define("torchItems", Lists.newArrayList("minecraft:torch"));
         }
     }
 
     static final ForgeConfigSpec commonSpec;
-    public static final GravelMinerConfig.Client COMMON;
+    public static final GravelMinerConfig.Common COMMON;
 
     static {
         final Pair<GravelMinerConfig.Common, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(GravelMinerConfig.Common::new);
         commonSpec = specPair.getRight();
-//        COMMON = specPair.getLeft(); // TODO Awaiting fix for COMMON in Forge
+        COMMON = specPair.getLeft();
     }
 
     static final ForgeConfigSpec clientSpec;
@@ -113,7 +91,6 @@ public class GravelMinerConfig {
         final Pair<GravelMinerConfig.Client, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(GravelMinerConfig.Client::new);
         clientSpec = specPair.getRight();
         CLIENT = specPair.getLeft();
-        COMMON = CLIENT; // TODO Awaiting fix for COMMON in Forge
     }
 
     static final ForgeConfigSpec serverSpec;
@@ -128,7 +105,7 @@ public class GravelMinerConfig {
     private static ModConfig config;
 
     @SubscribeEvent
-    public static void onConfigLoading(ModConfig.Loading event) {
+    public static void onConfigLoading(ModConfig.ModConfigEvent event) {
         config = event.getConfig();
     }
 
