@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -41,13 +42,15 @@ public class GravelMiner {
     }
 
     private void setup(FMLCommonSetupEvent event) {
-        NetworkHandler.init();
+        DeferredWorkQueue.runLater(NetworkHandler::init);
     }
 
     private void clientSetup(FMLClientSetupEvent event) {
-        GravelMinerKeyBindings.register();
+        DeferredWorkQueue.runLater(() -> {
+            GravelMinerKeyBindings.register();
 
-        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+            MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        });
     }
 
     public static boolean isAvailableFor(EntityPlayer entityPlayer) {

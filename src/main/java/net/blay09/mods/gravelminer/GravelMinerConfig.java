@@ -112,11 +112,11 @@ public class GravelMinerConfig {
     public static void increaseTorchDelay(int value) {
         int newTorchDelay = Math.max(1, Math.min(20, GravelMinerConfig.CLIENT.torchDelay.get() + value));
         config.getConfigData().set(GravelMinerConfig.CLIENT.torchDelay.getPath(), newTorchDelay);
-        config.getConfigData().save();
+        config.save();
     }
 
     public static void setEnabled(boolean enabled) {
         config.getConfigData().set(GravelMinerConfig.CLIENT.isEnabled.getPath(), enabled);
-        config.getConfigData().save();
+        config.save();
     }
 }
