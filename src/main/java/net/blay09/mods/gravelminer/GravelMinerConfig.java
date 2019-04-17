@@ -9,7 +9,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = GravelMiner.MOD_ID)
+@Mod.EventBusSubscriber(modid = GravelMiner.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class GravelMinerConfig {
 
     public static class Common {
@@ -18,7 +18,7 @@ public class GravelMinerConfig {
         public final ForgeConfigSpec.ConfigValue<List<String>> torchItems;
 
         Common(ForgeConfigSpec.Builder builder) {
-            builder.comment("Server configuration settings").push("server");
+            builder.comment("Common configuration settings").push("common");
 
             gravelBlocks = builder
                     .comment("Blocks that will fall and break into items when hitting a non-solid block. Format: modid:name")
@@ -32,8 +32,8 @@ public class GravelMinerConfig {
 
             torchItems = builder
                     .comment("Blocks that are non-solid and can be destroyed in a single hit. Format: modid:name (for use on clients)")
-                    .translation("gravelminer.config.gravelBlocks")
-                    .define("gravelBlocks", Lists.newArrayList("minecraft:torch"));
+                    .translation("gravelminer.config.torchItems")
+                    .define("torchItems", Lists.newArrayList("minecraft:torch"));
         }
     }
 
@@ -102,21 +102,23 @@ public class GravelMinerConfig {
         SERVER = specPair.getLeft();
     }
 
-    private static ModConfig config;
+    private static ModConfig clientConfig;
 
     @SubscribeEvent
     public static void onConfigLoading(ModConfig.ModConfigEvent event) {
-        config = event.getConfig();
+        if (event.getConfig().getType() == ModConfig.Type.CLIENT) {
+            clientConfig = event.getConfig();
+        }
     }
 
     public static void increaseTorchDelay(int value) {
         int newTorchDelay = Math.max(1, Math.min(20, GravelMinerConfig.CLIENT.torchDelay.get() + value));
-        config.getConfigData().set(GravelMinerConfig.CLIENT.torchDelay.getPath(), newTorchDelay);
-        config.save();
+        clientConfig.getConfigData().set(GravelMinerConfig.CLIENT.torchDelay.getPath(), newTorchDelay);
+        clientConfig.save();
     }
 
     public static void setEnabled(boolean enabled) {
-        config.getConfigData().set(GravelMinerConfig.CLIENT.isEnabled.getPath(), enabled);
-        config.save();
+        clientConfig.getConfigData().set(GravelMinerConfig.CLIENT.isEnabled.getPath(), enabled);
+        clientConfig.save();
     }
 }
