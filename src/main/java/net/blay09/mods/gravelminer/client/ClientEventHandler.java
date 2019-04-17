@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,11 +21,13 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import org.lwjgl.glfw.GLFW;
 
 import java.util.Iterator;
 import java.util.List;
@@ -46,17 +49,16 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
-        // TODO Awaiting fix for KeyInputEvent
-//        if (Keyboard.getEventKeyState()) {
-//            if (GravelMinerKeyBindings.keyToggle.isActiveAndMatches(Keyboard.getEventKey())) {
-//                boolean newEnabled = !GravelMinerConfig.CLIENT.isEnabled.get();
-//                GravelMinerConfig.setEnabled(newEnabled);
-//                    if (isServerInstalled) {
-//                        NetworkHandler.channel.sendToServer(new MessageSetEnabled(enabled));
-//                    }
-//                Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentTranslation("gravelminer.toggle" + (newEnabled ? "On" : "Off")), 3);
-//            }
-//        }
+        if (event.getAction() == GLFW.GLFW_PRESS) {
+            if (GravelMinerKeyBindings.keyToggle.isActiveAndMatches(InputMappings.getInputByCode(event.getKey(), event.getScanCode()))) {
+                boolean newEnabled = !GravelMinerConfig.CLIENT.isEnabled.get();
+                GravelMinerConfig.setEnabled(newEnabled);
+                if (GravelMiner.isServerInstalled) {
+                    NetworkHandler.channel.sendToServer(new MessageSetEnabled(newEnabled));
+                }
+                Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TextComponentTranslation("gravelminer.toggle" + (newEnabled ? "On" : "Off")), 3);
+            }
+        }
     }
 
     @SubscribeEvent
