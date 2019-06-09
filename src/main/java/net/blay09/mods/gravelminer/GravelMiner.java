@@ -4,8 +4,8 @@ import com.google.common.collect.Sets;
 import net.blay09.mods.gravelminer.client.ClientEventHandler;
 import net.blay09.mods.gravelminer.client.GravelMinerKeyBindings;
 import net.blay09.mods.gravelminer.net.NetworkHandler;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DeferredWorkQueue;
@@ -53,32 +53,32 @@ public class GravelMiner {
         });
     }
 
-    public static boolean isAvailableFor(EntityPlayer entityPlayer) {
-        return !GravelMinerConfig.SERVER.isOptIn.get() || hasClientSide.contains(entityPlayer.getUniqueID());
+    public static boolean isAvailableFor(PlayerEntity PlayerEntity) {
+        return !GravelMinerConfig.SERVER.isOptIn.get() || hasClientSide.contains(PlayerEntity.getUniqueID());
     }
 
-    public static boolean isEnabledFor(EntityPlayer entityPlayer) {
-        return isAvailableFor(entityPlayer) && hasEnabled.contains(entityPlayer.getUniqueID());
+    public static boolean isEnabledFor(PlayerEntity PlayerEntity) {
+        return isAvailableFor(PlayerEntity) && hasEnabled.contains(PlayerEntity.getUniqueID());
     }
 
-    public static void setHasClientSide(EntityPlayer entityPlayer) {
-        hasClientSide.add(entityPlayer.getUniqueID());
-        setHasEnabled(entityPlayer, true);
+    public static void setHasClientSide(PlayerEntity PlayerEntity) {
+        hasClientSide.add(PlayerEntity.getUniqueID());
+        setHasEnabled(PlayerEntity, true);
     }
 
-    public static void setHasEnabled(EntityPlayer entityPlayer, boolean enabled) {
+    public static void setHasEnabled(PlayerEntity PlayerEntity, boolean enabled) {
         if (enabled) {
-            hasEnabled.add(entityPlayer.getUniqueID());
+            hasEnabled.add(PlayerEntity.getUniqueID());
         } else {
-            hasEnabled.remove(entityPlayer.getUniqueID());
+            hasEnabled.remove(PlayerEntity.getUniqueID());
         }
     }
 
-    public static boolean isGravelBlock(IBlockState state) {
+    public static boolean isGravelBlock(BlockState state) {
         return !(state == null || state.getBlock().getRegistryName() == null) && GravelMinerConfig.COMMON.gravelBlocks.get().contains(state.getBlock().getRegistryName().toString());
     }
 
-    public static boolean isTorchBlock(IBlockState state) {
+    public static boolean isTorchBlock(BlockState state) {
         return !(state == null || state.getBlock().getRegistryName() == null) && GravelMinerConfig.COMMON.torchItems.get().contains(state.getBlock().getRegistryName().toString());
     }
 

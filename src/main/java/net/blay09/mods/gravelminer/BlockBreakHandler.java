@@ -1,10 +1,10 @@
 package net.blay09.mods.gravelminer;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.IFluidState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -38,7 +38,7 @@ public class BlockBreakHandler {
         for (int y = startY; y <= startY + maxCount; y++) {
             // Retrieve the block above the current position
             BlockPos posAbove = new BlockPos(event.getPos().getX(), y, event.getPos().getZ());
-            IBlockState stateAbove = event.getWorld().getBlockState(posAbove);
+            BlockState stateAbove = event.getWorld().getBlockState(posAbove);
 
             // If the block at this position is not gravel, abort here
             if (!GravelMiner.isGravelBlock(stateAbove)) {
@@ -61,19 +61,19 @@ public class BlockBreakHandler {
         }
     }
 
-    private void playBreakBlockEffects(EntityPlayer player, World world, BlockPos pos, IBlockState state) {
+    private void playBreakBlockEffects(PlayerEntity player, World world, BlockPos pos, BlockState state) {
         final int blockBreakEvent = 2001;
         world.playEvent(null, blockBreakEvent, pos, Block.getStateId(state));
     }
 
-    private boolean breakBlock(EntityPlayer player, World world, BlockPos pos, IBlockState state) {
+    private boolean breakBlock(PlayerEntity player, World world, BlockPos pos, BlockState state) {
         IFluidState fluidState = world.getFluidState(pos);
         boolean removedByPlayer = state.getBlock().removedByPlayer(state, world, pos, player, true, fluidState);
         if (!removedByPlayer) {
             return false;
         }
 
-        if (!player.abilities.isCreativeMode) {
+        if (!player.playerAbilities.isCreativeMode) {
             state.getBlock().onPlayerDestroy(world, pos, state);
             if (GravelMinerConfig.SERVER.rollFlintChance.get() || state.getBlock() != Blocks.GRAVEL) {
                 state.getBlock().harvestBlock(world, player, pos, state, world.getTileEntity(pos), ItemStack.EMPTY);
