@@ -42,7 +42,6 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onClientJoin(EntityJoinWorldEvent event) {
-        // TODO 1.14 Blocker: Event not yet called on client join https://github.com/MinecraftForge/MinecraftForge/issues/5786
         if (GravelMiner.isServerInstalled && event.getEntity() == Minecraft.getInstance().player) {
             NetworkHandler.channel.sendToServer(new MessageHello());
             NetworkHandler.channel.sendToServer(new MessageSetEnabled(GravelMinerConfig.CLIENT.isEnabled.get()));
