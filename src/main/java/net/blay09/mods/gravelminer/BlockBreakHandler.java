@@ -73,7 +73,7 @@ public class BlockBreakHandler {
             return false;
         }
 
-        if (!player.playerAbilities.isCreativeMode) {
+        if (!player.abilities.isCreativeMode) {
             state.getBlock().onPlayerDestroy(world, pos, state);
             if (GravelMinerConfig.SERVER.rollFlintChance.get() || state.getBlock() != Blocks.GRAVEL) {
                 state.getBlock().harvestBlock(world, player, pos, state, world.getTileEntity(pos), ItemStack.EMPTY);

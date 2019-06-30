@@ -57,7 +57,7 @@ public class ClientEventHandler {
                 if (GravelMiner.isServerInstalled) {
                     NetworkHandler.channel.sendToServer(new MessageSetEnabled(newEnabled));
                 }
-                Minecraft.getInstance().field_71456_v.getChatGUI().printChatMessageWithOptionalDeletion(new TranslationTextComponent("gravelminer.toggle" + (newEnabled ? "On" : "Off")), 3);
+                Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TranslationTextComponent("gravelminer.toggle" + (newEnabled ? "On" : "Off")), 3);
             }
         }
     }
@@ -81,14 +81,14 @@ public class ClientEventHandler {
                         if (gravelKiller.placeTorchDelayTicks <= 0) {
                             BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vec3d(0.5, 0.5, 0.5), Direction.UP, gravelKiller.torchPos, false);
                             if (GravelMiner.isTorchItem(entityPlayer.getHeldItemOffhand())) {
-                                Minecraft.getInstance().field_71442_b.func_217292_a(entityPlayer, world, Hand.OFF_HAND, rayTraceResult); // playerController.processRightClickBlock
+                                Minecraft.getInstance().playerController.func_217292_a(entityPlayer, world, Hand.OFF_HAND, rayTraceResult); // playerController.processRightClickBlock
                             } else {
                                 for (int i = 0; i < PlayerInventory.getHotbarSize(); i++) {
                                     ItemStack hotbarStack = entityPlayer.inventory.mainInventory.get(i);
                                     if (GravelMiner.isTorchItem(hotbarStack)) {
                                         int old = entityPlayer.inventory.currentItem;
                                         entityPlayer.inventory.currentItem = i;
-                                        Minecraft.getInstance().field_71442_b.func_217292_a(entityPlayer, world, Hand.MAIN_HAND, rayTraceResult); // playerController.processRightClickBlock
+                                        Minecraft.getInstance().playerController.func_217292_a(entityPlayer, world, Hand.MAIN_HAND, rayTraceResult); // playerController.processRightClickBlock
                                         entityPlayer.inventory.currentItem = old;
                                         break;
                                     }
