@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.IFluidState;
+import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -67,7 +67,7 @@ public class BlockBreakHandler {
     }
 
     private boolean breakBlock(PlayerEntity player, World world, BlockPos pos, BlockState state) {
-        IFluidState fluidState = world.getFluidState(pos);
+        FluidState fluidState = world.getFluidState(pos);
         boolean removedByPlayer = state.getBlock().removedByPlayer(state, world, pos, player, true, fluidState);
         if (!removedByPlayer) {
             return false;

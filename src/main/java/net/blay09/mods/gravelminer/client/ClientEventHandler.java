@@ -21,7 +21,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.event.TickEvent;
@@ -79,7 +79,7 @@ public class ClientEventHandler {
                     if (gravelKiller.placeTorchDelayTicks > 0) {
                         gravelKiller.placeTorchDelayTicks--;
                         if (gravelKiller.placeTorchDelayTicks <= 0) {
-                            BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vec3d(0.5, 0.5, 0.5), Direction.UP, gravelKiller.torchPos, false);
+                            BlockRayTraceResult rayTraceResult = new BlockRayTraceResult(new Vector3d(0.5, 0.5, 0.5), Direction.UP, gravelKiller.torchPos, false);
                             if (GravelMiner.isTorchItem(entityPlayer.getHeldItemOffhand())) {
                                 Minecraft.getInstance().playerController.func_217292_a(entityPlayer, world, Hand.OFF_HAND, rayTraceResult); // playerController.processRightClickBlock
                             } else {
