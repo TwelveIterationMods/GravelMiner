@@ -57,7 +57,8 @@ public class ClientEventHandler {
                 if (GravelMiner.isServerInstalled) {
                     NetworkHandler.channel.sendToServer(new MessageSetEnabled(newEnabled));
                 }
-                Minecraft.getInstance().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(new TranslationTextComponent("gravelminer.toggle" + (newEnabled ? "On" : "Off")), 3);
+                final TranslationTextComponent message = new TranslationTextComponent("gravelminer.toggle" + (newEnabled ? "On" : "Off"));
+                Minecraft.getInstance().player.sendStatusMessage(message, true);
             }
         }
     }

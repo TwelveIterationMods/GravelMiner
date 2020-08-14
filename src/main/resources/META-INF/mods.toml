@@ -3,6 +3,7 @@ loaderVersion="[24,)"
 issueTrackerURL="https://github.com/blay09/GravelMiner/issues"
 displayURL="https://minecraft.curseforge.com/projects/gravelminer"
 authors="BlayTheNinth"
+license="MIT"
 
 [[mods]]
 modId="gravelminer"
