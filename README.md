@@ -8,11 +8,11 @@ This mod is available for both Forge and Fabric (starting Minecraft 1.17). This 
 
 #### Forge
 
-[![Versions](http://cf.way2muchnoise.eu/versions/244759_latest.svg)](https://minecraft.curseforge.com/projects/gravelminer) [![Downloads](http://cf.way2muchnoise.eu/full_244759_downloads.svg)](https://minecraft.curseforge.com/projects/gravelminer)
+[![Versions](http://cf.way2muchnoise.eu/versions/244759_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/gravelminer) [![Downloads](http://cf.way2muchnoise.eu/full_244759_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/gravelminer)
 
 #### Fabric
 
-[![Versions](http://cf.way2muchnoise.eu/versions/_latest.svg)](https://minecraft.curseforge.com/projects/gravelminer-fabric) [![Downloads](http://cf.way2muchnoise.eu/full__downloads.svg)](https://minecraft.curseforge.com/projects/gravelminer-fabric)
+[![Versions](http://cf.way2muchnoise.eu/versions/506456_latest.svg)](https://www.curseforge.com/minecraft/mc-mods/gravelminer-fabric) [![Downloads](http://cf.way2muchnoise.eu/full_506456_downloads.svg)](https://www.curseforge.com/minecraft/mc-mods/gravelminer-fabric)
 
 ## Contributing
 
