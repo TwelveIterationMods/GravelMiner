@@ -1,8 +1,9 @@
 package net.blay09.mods.gravelminer;
 
 import com.google.common.collect.Sets;
-import net.blay09.mods.balm.event.BalmEvents;
-import net.blay09.mods.balm.network.BalmNetworking;
+import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.event.BreakBlockEvent;
+import net.blay09.mods.balm.api.event.PlayerLoginEvent;
 import net.blay09.mods.gravelminer.network.HelloMessage;
 import net.blay09.mods.gravelminer.network.ModNetworking;
 import net.minecraft.core.Registry;
@@ -24,11 +25,11 @@ public class GravelMiner {
 
     public static void initialize() {
         GravelMinerConfig.initialize();
-        ModNetworking.initialize();
+        ModNetworking.initialize(Balm.getNetworking());
 
-        BalmEvents.onPlayerLogin(player -> BalmNetworking.sendTo(player, new HelloMessage()));
+        Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), new HelloMessage()));
 
-        BalmEvents.onBlockBroken(BlockBreakHandler::blockBroken);
+        Balm.getEvents().onEvent(BreakBlockEvent.Post.class, BlockBreakHandler::blockBroken);
     }
 
     public static boolean isAvailableFor(Player player) {

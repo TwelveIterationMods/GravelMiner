@@ -1,21 +1,25 @@
 package net.blay09.mods.gravelminer;
 
-import net.blay09.mods.balm.entity.BalmPlayers;
+import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.api.event.BreakBlockEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 
 public class BlockBreakHandler {
 
-    public static void blockBroken(Level level, Player player, BlockPos pos, BlockState state, BlockEntity blockEntity) {
+    public static void blockBroken(BreakBlockEvent event) {
+        Player player = event.getPlayer();
+        Level level = event.getLevel();
+        BlockPos pos = event.getPos();
+        BlockState state = event.getState();
         // Do not handle this event for fake players and players who do not have GravelMiner enabled.
-        if (BalmPlayers.isFakePlayer(player) || !GravelMiner.isEnabledFor(player)) {
+        if (Balm.getHooks().isFakePlayer(player) || !GravelMiner.isEnabledFor(player)) {
             return;
         }
 
