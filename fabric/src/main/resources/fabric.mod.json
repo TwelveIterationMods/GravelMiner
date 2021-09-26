@@ -15,7 +15,7 @@
   },
 
   "license": "All Rights Reserved",
-  "icon": "assets/gravelminer/icon.png",
+  "icon": "gravelminer-icon.png",
 
   "environment": "*",
   "entrypoints": {
