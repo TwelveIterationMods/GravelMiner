@@ -30,6 +30,8 @@ public class GravelMiner {
         Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), new HelloMessage()));
 
         Balm.getEvents().onEvent(BreakBlockEvent.Post.class, BlockBreakHandler::blockBroken);
+
+        Balm.initialize(GravelMiner.MOD_ID);
     }
 
     public static boolean isAvailableFor(Player player) {
