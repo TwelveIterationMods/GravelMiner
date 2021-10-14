@@ -25,3 +25,9 @@ Automatically (insta-)mines falling gravel blocks that get in your way while min
     versionRange="[1.17.1,1.18)"
     ordering="NONE"
     side="BOTH"
+[[dependencies.gravelminer]]
+    modId="balm"
+    mandatory=true
+    versionRange="[1.6.0,)"
+    ordering="NONE"
+    side="BOTH"
