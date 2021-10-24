@@ -3,6 +3,7 @@ package net.blay09.mods.gravelminer;
 import com.google.common.collect.Sets;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.BreakBlockEvent;
+import net.blay09.mods.balm.api.event.EventPriority;
 import net.blay09.mods.balm.api.event.PlayerLoginEvent;
 import net.blay09.mods.gravelminer.network.HelloMessage;
 import net.blay09.mods.gravelminer.network.ModNetworking;
@@ -29,7 +30,7 @@ public class GravelMiner {
 
         Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), new HelloMessage()));
 
-        Balm.getEvents().onEvent(BreakBlockEvent.Post.class, BlockBreakHandler::blockBroken);
+        Balm.getEvents().onEvent(BreakBlockEvent.class, BlockBreakHandler::blockBroken, EventPriority.Lowest);
 
         Balm.initialize(GravelMiner.MOD_ID);
     }
