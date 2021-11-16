@@ -30,7 +30,6 @@
     ]
   },
   "mixins": [
-    "gravelminer.mixins.json"
   ],
   "depends": {
     "cloth-config2": ">=5.0.34",
