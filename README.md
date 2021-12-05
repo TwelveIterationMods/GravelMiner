@@ -4,7 +4,7 @@ Minecraft Mod. Automatically (insta-)mines falling gravel blocks that get in you
 
 See [the license](LICENSE) for modpack permissions etc.
 
-This mod is available for both Forge and Fabric (starting Minecraft 1.17). This is a trial run to see if supporting both platforms is feasible.
+This mod is available for both Forge and Fabric (starting Minecraft 1.17).
 
 #### Forge
 
