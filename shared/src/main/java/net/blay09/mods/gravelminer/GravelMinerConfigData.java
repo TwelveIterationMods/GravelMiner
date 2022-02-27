@@ -34,6 +34,19 @@ public class GravelMinerConfigData implements BalmConfigData {
     public static class Client {
         @Comment("Whether GravelMiner is currently enabled for this client (toggled via keybind)")
         public boolean isEnabled = true;
+
+        @Comment("Defines when GravelMiner should activate. Either ALWAYS, WHEN_SNEAKING or WHEN_NOT_SNEAKING")
+        public GravelMinerActivation activation = GravelMinerActivation.ALWAYS;
     }
 
+    public GravelMinerClientSetting getClientSetting() {
+        if (client.isEnabled && client.activation == GravelMinerActivation.ALWAYS) {
+            return GravelMinerClientSetting.ENABLED;
+        } else if (client.isEnabled && client.activation == GravelMinerActivation.WHEN_SNEAKING) {
+            return GravelMinerClientSetting.ONLY_WHEN_SNEAKING;
+        } else if (client.isEnabled && client.activation == GravelMinerActivation.WHEN_NOT_SNEAKING) {
+            return GravelMinerClientSetting.ONLY_WHEN_NOT_SNEAKING;
+        }
+        return GravelMinerClientSetting.DISABLED;
+    }
 }

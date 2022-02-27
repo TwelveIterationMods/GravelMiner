@@ -8,7 +8,7 @@ public class ModNetworking {
 
     public static void initialize(BalmNetworking networking) {
         networking.registerClientboundPacket(id("hello"), HelloMessage.class, HelloMessage::encode, HelloMessage::decode, HelloMessage::handle);
-        networking.registerServerboundPacket(id("set_enabled"), SetEnabledMessage.class, SetEnabledMessage::encode, SetEnabledMessage::decode, SetEnabledMessage::handle);
+        networking.registerServerboundPacket(id("set_enabled"), SetClientSettingMessage.class, SetClientSettingMessage::encode, SetClientSettingMessage::decode, SetClientSettingMessage::handle);
     }
 
     private static ResourceLocation id(String name) {

@@ -1,6 +1,5 @@
 package net.blay09.mods.gravelminer;
 
-import com.google.common.collect.Sets;
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.event.BreakBlockEvent;
 import net.blay09.mods.balm.api.event.EventPriority;
@@ -12,15 +11,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public class GravelMiner {
 
     public static final String MOD_ID = "gravelminer";
 
-    private static final Set<UUID> hasClientSide = Sets.newHashSet();
-    private static final Set<UUID> hasEnabled = Sets.newHashSet();
+    private static final Set<UUID> hasClientSide = new HashSet<>();
+    private static final Map<UUID, GravelMinerClientSetting> clientSettings = new HashMap<>();
 
     public static boolean isServerInstalled;
 
@@ -31,8 +29,6 @@ public class GravelMiner {
         Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), new HelloMessage()));
 
         Balm.getEvents().onEvent(BreakBlockEvent.class, BlockBreakHandler::blockBroken, EventPriority.Lowest);
-
-        Balm.initialize(GravelMiner.MOD_ID);
     }
 
     public static boolean isAvailableFor(Player player) {
@@ -40,20 +36,16 @@ public class GravelMiner {
     }
 
     public static boolean isEnabledFor(Player player) {
-        return isAvailableFor(player) && hasEnabled.contains(player.getUUID());
+        return isAvailableFor(player) && clientSettings.getOrDefault(player.getUUID(), GravelMinerClientSetting.DISABLED).isEnabled(player);
     }
 
     public static void setHasClientSide(Player player) {
         hasClientSide.add(player.getUUID());
-        setHasEnabled(player, true);
+        setClientSetting(player, GravelMinerClientSetting.ENABLED);
     }
 
-    public static void setHasEnabled(Player player, boolean enabled) {
-        if (enabled) {
-            hasEnabled.add(player.getUUID());
-        } else {
-            hasEnabled.remove(player.getUUID());
-        }
+    public static void setClientSetting(Player player, GravelMinerClientSetting setting) {
+        clientSettings.put(player.getUUID(), setting);
     }
 
     public static boolean isGravelBlock(BlockState state) {
