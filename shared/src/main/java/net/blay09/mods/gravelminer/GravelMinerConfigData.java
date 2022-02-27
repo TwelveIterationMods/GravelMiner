@@ -39,14 +39,4 @@ public class GravelMinerConfigData implements BalmConfigData {
         public GravelMinerActivation activation = GravelMinerActivation.ALWAYS;
     }
 
-    public GravelMinerClientSetting getClientSetting() {
-        if (client.isEnabled && client.activation == GravelMinerActivation.ALWAYS) {
-            return GravelMinerClientSetting.ENABLED;
-        } else if (client.isEnabled && client.activation == GravelMinerActivation.WHEN_SNEAKING) {
-            return GravelMinerClientSetting.ONLY_WHEN_SNEAKING;
-        } else if (client.isEnabled && client.activation == GravelMinerActivation.WHEN_NOT_SNEAKING) {
-            return GravelMinerClientSetting.ONLY_WHEN_NOT_SNEAKING;
-        }
-        return GravelMinerClientSetting.DISABLED;
-    }
 }

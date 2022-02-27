@@ -16,4 +16,16 @@ public class GravelMinerConfig {
             config.client.isEnabled = enabled;
         });
     }
+
+    public static GravelMinerClientSetting getClientSetting() {
+        GravelMinerConfigData config = getActive();
+        if (config.client.isEnabled && config.client.activation == GravelMinerActivation.ALWAYS) {
+            return GravelMinerClientSetting.ENABLED;
+        } else if (config.client.isEnabled && config.client.activation == GravelMinerActivation.WHEN_SNEAKING) {
+            return GravelMinerClientSetting.ONLY_WHEN_SNEAKING;
+        } else if (config.client.isEnabled && config.client.activation == GravelMinerActivation.WHEN_NOT_SNEAKING) {
+            return GravelMinerClientSetting.ONLY_WHEN_NOT_SNEAKING;
+        }
+        return GravelMinerClientSetting.DISABLED;
+    }
 }

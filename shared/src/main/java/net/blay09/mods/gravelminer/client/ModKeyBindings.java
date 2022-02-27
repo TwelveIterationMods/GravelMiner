@@ -28,7 +28,7 @@ public class ModKeyBindings {
         while (BalmClient.getKeyMappings().isActiveAndWasPressed(keyToggleGravelMiner)) {
             boolean newEnabled = !GravelMinerConfig.getActive().client.isEnabled;
             GravelMinerConfig.setEnabled(newEnabled);
-            Balm.getNetworking().sendToServer(new SetClientSettingMessage(newEnabled));
+            Balm.getNetworking().sendToServer(new SetClientSettingMessage(GravelMinerConfig.getClientSetting()));
 
             if (client.player != null) {
                 final TranslatableComponent message = new TranslatableComponent("gravelminer.toggle" + (newEnabled ? "On" : "Off"));

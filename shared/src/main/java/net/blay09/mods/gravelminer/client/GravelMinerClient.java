@@ -2,6 +2,7 @@ package net.blay09.mods.gravelminer.client;
 
 import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.client.BalmClient;
+import net.blay09.mods.balm.api.event.ConfigReloadedEvent;
 import net.blay09.mods.balm.api.event.client.ConnectedToServerEvent;
 import net.blay09.mods.gravelminer.GravelMinerClientSetting;
 import net.blay09.mods.gravelminer.GravelMinerConfig;
@@ -12,7 +13,12 @@ public class GravelMinerClient {
         ModKeyBindings.initialize(BalmClient.getKeyMappings());
 
         Balm.getEvents().onEvent(ConnectedToServerEvent.class, event -> {
-            GravelMinerClientSetting setting = GravelMinerConfig.getActive().getClientSetting();
+            GravelMinerClientSetting setting = GravelMinerConfig.getClientSetting();
+            Balm.getNetworking().sendToServer(new SetClientSettingMessage(setting));
+        });
+
+        Balm.getEvents().onEvent(ConfigReloadedEvent.class, event -> {
+            GravelMinerClientSetting setting = GravelMinerConfig.getClientSetting();
             Balm.getNetworking().sendToServer(new SetClientSettingMessage(setting));
         });
     }
