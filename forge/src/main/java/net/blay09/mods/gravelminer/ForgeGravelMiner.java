@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod;
 public class ForgeGravelMiner {
     public ForgeGravelMiner() {
         Balm.initialize(GravelMiner.MOD_ID, GravelMiner::initialize);
-        DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(GravelMiner.MOD_ID, GravelMinerClient::initialize));
+        DistExecutor.runWhenOn(Dist.CLIENT, () -> () -> BalmClient.initialize(GravelMiner.MOD_ID, GravelMinerClient::initialize));
     }
 
 }
