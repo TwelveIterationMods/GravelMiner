@@ -12,7 +12,8 @@ import net.blay09.mods.gravelminer.GravelMinerConfig;
 import net.blay09.mods.gravelminer.network.SetClientSettingMessage;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.TranslatableComponent;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 
 public class ModKeyBindings {
 
@@ -31,7 +32,7 @@ public class ModKeyBindings {
             Balm.getNetworking().sendToServer(new SetClientSettingMessage(GravelMinerConfig.getClientSetting()));
 
             if (client.player != null) {
-                final TranslatableComponent message = new TranslatableComponent("gravelminer.toggle" + (newEnabled ? "On" : "Off"));
+                final MutableComponent message = Component.translatable("gravelminer.toggle" + (newEnabled ? "On" : "Off"));
                 client.player.displayClientMessage(message, true);
             }
         }
