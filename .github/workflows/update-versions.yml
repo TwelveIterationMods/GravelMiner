@@ -1,0 +1,18 @@
+name: update-versions
+on:
+  workflow_dispatch:
+    inputs:
+      minecraftVersion:
+        description: 'The Minecraft version to update to'
+        required: true
+        type: string
+      channel:
+        description: 'The release channel to update to, either latest or recommended'
+        required: false
+        default: 'latest'
+        type: string
+
+jobs:
+  build:
+    uses: ModdingForBlockheads/Workflows/.github/workflows/update-versions.yml@main
+    secrets: inherit
