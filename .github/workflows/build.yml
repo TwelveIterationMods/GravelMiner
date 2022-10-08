@@ -1,0 +1,7 @@
+name: build
+on: [push]
+
+jobs:
+  build:
+    uses: ModdingForBlockheads/Workflows/.github/workflows/publish-snapshot.yml@main
+    secrets: inherit
