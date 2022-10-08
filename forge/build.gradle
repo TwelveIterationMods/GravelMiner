@@ -179,9 +179,12 @@ curseforge {
         addGameVersion 'Forge'
 
         relations {
-            requiredLibrary 'balm'
+            requiredDependency 'balm'
         }
     }
+}
+if (System.getenv("CURSEFORGE_TOKEN") != null) {
+    tasks.publish.dependsOn(tasks.curseforge)
 }
 
 modrinth {
@@ -196,4 +199,7 @@ modrinth {
     dependencies {
         required.project "balm"
     }
+}
+if (System.getenv("MODRINTH_TOKEN") != null) {
+    tasks.publish.dependsOn(tasks.modrinth)
 }
