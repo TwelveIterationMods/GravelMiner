@@ -15,4 +15,7 @@ on:
 jobs:
   build:
     uses: ModdingForBlockheads/Workflows/.github/workflows/update-versions.yml@main
+    with:
+      minecraftVersion: ${{ github.event.inputs.minecraftVersion }}
+      channel: ${{ github.event.inputs.channel }}
     secrets: inherit
