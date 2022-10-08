@@ -6,8 +6,12 @@ plugins {
 	id "com.modrinth.minotaur" version "2.+"
 }
 
+def buildVersion = System.getenv("GPR_BUILD_VERSION") ? System.getenv("GPR_BUILD_VERSION") : mod_version
+if (buildVersion.startsWith("v")) {
+	buildVersion = buildVersion.substring(1)
+}
 def buildNumber = System.getenv("GPR_BUILD_NUMBER") ? "+" + System.getenv("GPR_BUILD_NUMBER") : ""
-version = mod_version + buildNumber
+version = buildVersion + buildNumber
 
 archivesBaseName = "${mod_id}-fabric-${minecraft_version}"
 group = mod_group

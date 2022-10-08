@@ -1,13 +1,13 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net' }
-		maven { url = "https://repo.spongepowered.org/maven" }
+        maven { url = "https://repo.spongepowered.org/maven" }
         mavenCentral()
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
-		classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
-		classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+        classpath 'gradle.plugin.com.matthewprenger:CurseGradle:1.4.0'
         classpath "com.modrinth.minotaur:Minotaur:2.+"
     }
 }
@@ -18,6 +18,9 @@ apply plugin: "com.matthewprenger.cursegradle"
 apply plugin: "com.modrinth.minotaur"
 
 def buildVersion = System.getenv("GPR_BUILD_VERSION") ? System.getenv("GPR_BUILD_VERSION") : mod_version
+if (buildVersion.startsWith("v")) {
+    buildVersion = buildVersion.substring(1)
+}
 def buildNumber = System.getenv("GPR_BUILD_NUMBER") ? "+" + System.getenv("GPR_BUILD_NUMBER") : ""
 version = buildVersion + buildNumber
 
@@ -50,7 +53,7 @@ minecraft {
             mods {
                 "${mod_id}" {
                     source sourceSets.main
-					source project(":shared").sourceSets.main
+                    source project(":shared").sourceSets.main
                 }
             }
         }
@@ -77,7 +80,7 @@ minecraft {
             mods {
                 "${mod_id}" {
                     source sourceSets.main
-					source project(":shared").sourceSets.main
+                    source project(":shared").sourceSets.main
                 }
             }
         }
@@ -106,7 +109,7 @@ minecraft {
             mods {
                 "${mod_id}" {
                     source sourceSets.main
-					source project(":shared").sourceSets.main
+                    source project(":shared").sourceSets.main
                 }
             }
         }
@@ -114,18 +117,18 @@ minecraft {
 }
 
 sourceSets {
-	main {
+    main {
         resources {
             srcDirs 'src/generated/resources'
         }
-		ext.refMap = "${mod_id}.refmap.json"
-	}
+        ext.refMap = "${mod_id}.refmap.json"
+    }
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
-	compileOnly project(":shared")
+    compileOnly project(":shared")
 
     implementation fg.deobf("net.blay09.mods:balm:${balm_forge_version}")
 
@@ -151,37 +154,37 @@ jar.finalizedBy('reobfJar')
 publishing {
     publications {
         mavenJava(MavenPublication) {
-			artifactId = mod_id + "-forge"
-			
+            artifactId = mod_id + "-forge"
+
             artifact jar
         }
     }
     repositories {
-		maven {
-			name = "GitHubPackages"
-			url = uri("https://maven.pkg.github.com/" + github_repo)
-			credentials {
-				username = project.findProperty("gpr.user") ?: System.getenv("GPR_USERNAME")
-				password = project.findProperty("gpr.key") ?: System.getenv("GPR_TOKEN")
-			}
-		}
-	}
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/" + github_repo)
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("GPR_USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("GPR_TOKEN")
+            }
+        }
+    }
 }
 
 curseforge {
-	apiKey = project.findProperty("curseforge.api_key") ?: System.getenv("CF_API_KEY") ?: "none"
-	project {
-		id = curseforge_forge_project_id
-		releaseType = curseforge_release_type
-		changelogType = 'markdown'
-		changelog = file('../changelog.md')
-		addGameVersion minecraft_version
-		addGameVersion 'Forge'
+    apiKey = project.findProperty("curseforge.api_key") ?: System.getenv("CF_API_KEY") ?: "none"
+    project {
+        id = curseforge_forge_project_id
+        releaseType = curseforge_release_type
+        changelogType = 'markdown'
+        changelog = file('../changelog.md')
+        addGameVersion minecraft_version
+        addGameVersion 'Forge'
 
-		relations {
-			requiredLibrary 'balm'
-		}
-	}
+        relations {
+            requiredLibrary 'balm'
+        }
+    }
 }
 
 modrinth {
