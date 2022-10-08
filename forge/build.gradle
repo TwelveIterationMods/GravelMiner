@@ -18,9 +18,6 @@ apply plugin: "com.matthewprenger.cursegradle"
 apply plugin: "com.modrinth.minotaur"
 
 def buildVersion = System.getenv("GPR_BUILD_VERSION") ? System.getenv("GPR_BUILD_VERSION") : mod_version
-if (buildVersion.startsWith("v")) {
-    buildVersion = buildVersion.substring(1)
-}
 def buildNumber = System.getenv("GPR_BUILD_NUMBER") ? "+" + System.getenv("GPR_BUILD_NUMBER") : ""
 version = buildVersion + buildNumber
 
