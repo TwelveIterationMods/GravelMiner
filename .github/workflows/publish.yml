@@ -5,6 +5,6 @@ on:
       - '*'
 
 jobs:
-  build:
-    uses: ModdingForBlockheads/Workflows/.github/workflows/publish-release.yml@main
+  publish:
+    uses: TwelveIterationMods/Workflows/.github/workflows/publish-release.yml@main
     secrets: inherit

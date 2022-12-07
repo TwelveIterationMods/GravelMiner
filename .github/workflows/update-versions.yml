@@ -10,11 +10,14 @@ on:
         description: 'The release channel to update to, either latest or recommended'
         required: false
         default: 'latest'
-        type: string
+        type: choice
+        options:
+          - latest
+          - recommended
 
 jobs:
-  build:
-    uses: ModdingForBlockheads/Workflows/.github/workflows/update-versions.yml@main
+  update-versions:
+    uses: TwelveIterationMods/Workflows/.github/workflows/update-versions.yml@main
     with:
       minecraftVersion: ${{ github.event.inputs.minecraftVersion }}
       channel: ${{ github.event.inputs.channel }}
