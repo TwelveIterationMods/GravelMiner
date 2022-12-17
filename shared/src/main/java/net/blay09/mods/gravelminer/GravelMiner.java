@@ -7,6 +7,7 @@ import net.blay09.mods.balm.api.event.PlayerLoginEvent;
 import net.blay09.mods.gravelminer.network.HelloMessage;
 import net.blay09.mods.gravelminer.network.ModNetworking;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,7 +50,7 @@ public class GravelMiner {
     }
 
     public static boolean isGravelBlock(BlockState state) {
-        ResourceLocation registryName = state != null ? Registry.BLOCK.getKey(state.getBlock()) : null;
+        ResourceLocation registryName = state != null ? BuiltInRegistries.BLOCK.getKey(state.getBlock()) : null;
         return registryName != null && GravelMinerConfig.getActive().common.gravelBlocks.contains(registryName.toString());
     }
 
