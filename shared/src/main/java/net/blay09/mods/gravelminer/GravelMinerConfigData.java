@@ -1,20 +1,16 @@
 package net.blay09.mods.gravelminer;
 
 import com.google.common.collect.Lists;
-import me.shedaniel.autoconfig.annotation.Config;
-import me.shedaniel.autoconfig.annotation.ConfigEntry;
 import net.blay09.mods.balm.api.config.BalmConfigData;
 import net.blay09.mods.balm.api.config.Comment;
+import net.blay09.mods.balm.api.config.Config;
 
 import java.util.List;
 
-@Config(name = GravelMiner.MOD_ID)
+@Config(GravelMiner.MOD_ID)
 public class GravelMinerConfigData implements BalmConfigData {
 
-    @ConfigEntry.Gui.CollapsibleObject
     public Common common = new Common();
-
-    @ConfigEntry.Gui.CollapsibleObject
     public Client client = new Client();
 
     public static class Common {

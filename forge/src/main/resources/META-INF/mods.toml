@@ -5,7 +5,7 @@ issueTrackerURL="https://github.com/TwelveIterationMods/GravelMiner/issues"
 
 [[mods]]
 modId="gravelminer"
-version="${file.jarVersion}"
+version="${mod_version}"
 displayName="GravelMiner"
 displayURL="https://mods.twelveiterations.com/mc/gravelminer"
 logoFile="gravelminer-icon.png"
