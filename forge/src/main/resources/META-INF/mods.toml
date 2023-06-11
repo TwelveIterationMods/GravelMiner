@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[44,)"
+loaderVersion="${forge_loader_version_range}"
 license="All rights reserved"
 issueTrackerURL="https://github.com/TwelveIterationMods/GravelMiner/issues"
 
@@ -7,7 +7,7 @@ issueTrackerURL="https://github.com/TwelveIterationMods/GravelMiner/issues"
 modId="gravelminer"
 version="${file.jarVersion}"
 displayName="GravelMiner"
-displayURL="https://blay09.net/mods/gravelminer"
+displayURL="https://mods.twelveiterations.com/mc/gravelminer"
 logoFile="gravelminer-icon.png"
 credits="BlayTheNinth"
 authors="BlayTheNinth"
@@ -18,18 +18,18 @@ Automatically (insta-)mines falling gravel blocks that get in your way while min
 [[dependencies.gravelminer]]
     modId="forge"
     mandatory=true
-    versionRange="[44,)"
+    versionRange="${forge_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.gravelminer]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.19.3,1.20)"
+    versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
 [[dependencies.gravelminer]]
     modId="balm"
     mandatory=true
-    versionRange="[5.0.0,)"
+    versionRange="${balm_version_range}"
     ordering="NONE"
     side="BOTH"
