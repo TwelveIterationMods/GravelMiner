@@ -1,1 +1,2 @@
 - Updated to Minecraft 1.20
+- Fixed config load failure on Fabric

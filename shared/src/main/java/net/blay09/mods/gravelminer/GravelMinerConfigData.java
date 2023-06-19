@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.blay09.mods.balm.api.config.BalmConfigData;
 import net.blay09.mods.balm.api.config.Comment;
 import net.blay09.mods.balm.api.config.Config;
+import net.blay09.mods.balm.api.config.ExpectedType;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class GravelMinerConfigData implements BalmConfigData {
     public Client client = new Client();
 
     public static class Common {
+        @ExpectedType(String.class)
         @Comment("Blocks that will fall and break into items when hitting a non-solid block. Format: modid:name")
         public List<String> gravelBlocks = Lists.newArrayList("minecraft:gravel");
 
