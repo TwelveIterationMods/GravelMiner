@@ -7,8 +7,8 @@ import net.minecraft.resources.ResourceLocation;
 public class ModNetworking {
 
     public static void initialize(BalmNetworking networking) {
-        networking.registerClientboundPacket(id("hello"), HelloMessage.class, HelloMessage::encode, HelloMessage::decode, HelloMessage::handle);
-        networking.registerServerboundPacket(id("set_enabled"), SetClientSettingMessage.class, SetClientSettingMessage::encode, SetClientSettingMessage::decode, SetClientSettingMessage::handle);
+        networking.registerClientboundPacket(HelloMessage.TYPE, HelloMessage.class, HelloMessage::encode, HelloMessage::decode, HelloMessage::handle);
+        networking.registerServerboundPacket(SetClientSettingMessage.TYPE, SetClientSettingMessage.class, SetClientSettingMessage::encode, SetClientSettingMessage::decode, SetClientSettingMessage::handle);
     }
 
     private static ResourceLocation id(String name) {
