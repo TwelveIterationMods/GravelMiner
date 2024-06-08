@@ -1,2 +1,4 @@
+Updated to Minecraft 1.21
+
 - Hotfix: Fixed crash on startup on NeoForge
 - Updated to Minecraft 1.20.6

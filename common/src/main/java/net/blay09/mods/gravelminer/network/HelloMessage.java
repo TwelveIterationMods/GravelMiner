@@ -10,7 +10,7 @@ import net.minecraft.world.entity.player.Player;
 
 public class HelloMessage implements CustomPacketPayload {
 
-    public static final Type<HelloMessage> TYPE = new Type<>(new ResourceLocation(GravelMiner.MOD_ID, "hello"));
+    public static final Type<HelloMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(GravelMiner.MOD_ID, "hello"));
 
     public static void encode(FriendlyByteBuf buf, HelloMessage message) {
     }

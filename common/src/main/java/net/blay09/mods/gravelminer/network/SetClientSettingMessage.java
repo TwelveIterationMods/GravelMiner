@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class SetClientSettingMessage implements CustomPacketPayload {
 
-    public static final CustomPacketPayload.Type<SetClientSettingMessage> TYPE = new CustomPacketPayload.Type<>(new ResourceLocation(GravelMiner.MOD_ID,
+    public static final CustomPacketPayload.Type<SetClientSettingMessage> TYPE = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath(GravelMiner.MOD_ID,
             "set_client_setting"));
 
     private final GravelMinerClientSetting setting;
