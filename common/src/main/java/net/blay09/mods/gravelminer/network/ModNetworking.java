@@ -8,8 +8,8 @@ public class ModNetworking {
     public static void initialize(BalmNetworking networking) {
         networking.allowServerOnly(GravelMiner.MOD_ID);
 
-        networking.registerClientboundPacket(HelloMessage.TYPE, HelloMessage.class, HelloMessage::encode, HelloMessage::decode, HelloMessage::handle);
-        networking.registerServerboundPacket(SetClientSettingMessage.TYPE, SetClientSettingMessage.class, SetClientSettingMessage::encode, SetClientSettingMessage::decode, SetClientSettingMessage::handle);
+        networking.registerClientboundPacket(HelloMessage.TYPE, HelloMessage.class, HelloMessage.STREAM_CODEC, HelloMessage::handle);
+        networking.registerServerboundPacket(SetClientSettingMessage.TYPE, SetClientSettingMessage.class, SetClientSettingMessage.STREAM_CODEC, SetClientSettingMessage::handle);
     }
 
 }

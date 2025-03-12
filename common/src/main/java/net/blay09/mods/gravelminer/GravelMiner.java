@@ -6,7 +6,6 @@ import net.blay09.mods.balm.api.event.EventPriority;
 import net.blay09.mods.balm.api.event.PlayerLoginEvent;
 import net.blay09.mods.gravelminer.network.HelloMessage;
 import net.blay09.mods.gravelminer.network.ModNetworking;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
@@ -27,7 +26,7 @@ public class GravelMiner {
         GravelMinerConfig.initialize();
         ModNetworking.initialize(Balm.getNetworking());
 
-        Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), new HelloMessage()));
+        Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), HelloMessage.INSTANCE));
 
         Balm.getEvents().onEvent(BreakBlockEvent.class, BlockBreakHandler::blockBroken, EventPriority.Lowest);
     }
