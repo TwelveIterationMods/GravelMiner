@@ -24,9 +24,6 @@
     ],
     "client": [
       "net.blay09.mods.gravelminer.fabric.client.FabricGravelMinerClient"
-    ],
-    "modmenu": [
-      "net.blay09.mods.gravelminer.fabric.compat.ModMenuIntegration"
     ]
   },
   "mixins": [
