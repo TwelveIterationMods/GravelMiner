@@ -50,7 +50,10 @@ public class GravelMiner {
 
     public static boolean isGravelBlock(BlockState state) {
         ResourceLocation registryName = state != null ? BuiltInRegistries.BLOCK.getKey(state.getBlock()) : null;
-        return registryName != null && GravelMinerConfig.getActive().common.gravelBlocks.contains(registryName.toString());
+        return registryName != null && GravelMinerConfig.getActive().common.gravelBlocks.contains(registryName);
     }
 
+    public static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
 }

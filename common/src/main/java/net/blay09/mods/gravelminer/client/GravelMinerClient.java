@@ -10,7 +10,7 @@ import net.blay09.mods.gravelminer.network.SetClientSettingMessage;
 
 public class GravelMinerClient {
     public static void initialize() {
-        ModKeyBindings.initialize(BalmClient.getKeyMappings());
+        ModKeyBindings.initialize();
 
         Balm.getEvents().onEvent(ConnectedToServerEvent.class, event -> {
             GravelMinerClientSetting setting = GravelMinerConfig.getClientSetting();
