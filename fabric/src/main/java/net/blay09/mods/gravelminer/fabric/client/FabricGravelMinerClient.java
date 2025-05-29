@@ -10,6 +10,6 @@ public class FabricGravelMinerClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        BalmClient.initialize(GravelMiner.MOD_ID, EmptyLoadContext.INSTANCE, GravelMinerClient::initialize);
+        BalmClient.initializeMod(GravelMiner.MOD_ID, EmptyLoadContext.INSTANCE, GravelMinerClient::initialize);
     }
 }

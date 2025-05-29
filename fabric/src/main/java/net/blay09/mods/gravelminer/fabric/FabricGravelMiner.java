@@ -8,6 +8,6 @@ import net.fabricmc.api.ModInitializer;
 public class FabricGravelMiner implements ModInitializer {
     @Override
     public void onInitialize() {
-        Balm.initialize(GravelMiner.MOD_ID, EmptyLoadContext.INSTANCE, GravelMiner::initialize);
+        Balm.initializeMod(GravelMiner.MOD_ID, EmptyLoadContext.INSTANCE, GravelMiner::initialize);
     }
 }
