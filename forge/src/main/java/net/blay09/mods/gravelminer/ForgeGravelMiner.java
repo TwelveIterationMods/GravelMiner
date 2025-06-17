@@ -14,7 +14,7 @@ public class ForgeGravelMiner {
         final var loadContext = new ForgeLoadContext(context.getModEventBus());
         Balm.initializeMod(GravelMiner.MOD_ID, loadContext, GravelMiner::initialize);
         if (FMLEnvironment.dist.isClient()) {
-            BalmClient.initialize(GravelMiner.MOD_ID, loadContext, GravelMinerClient::initialize);
+            BalmClient.initializeMod(GravelMiner.MOD_ID, loadContext, GravelMinerClient::initialize);
         }
     }
 

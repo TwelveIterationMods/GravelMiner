@@ -11,7 +11,7 @@ import net.neoforged.fml.common.Mod;
 public class NeoForgeGravelMinerClient {
     public NeoForgeGravelMinerClient(IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modEventBus);
-        BalmClient.initialize(GravelMiner.MOD_ID, context, GravelMinerClient::initialize);
+        BalmClient.initializeMod(GravelMiner.MOD_ID, context, GravelMinerClient::initialize);
     }
 
 }
