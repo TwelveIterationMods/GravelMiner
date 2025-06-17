@@ -9,7 +9,7 @@ import net.neoforged.fml.common.Mod;
 public class NeoForgeGravelMiner {
     public NeoForgeGravelMiner(IEventBus modEventBus) {
         final var context = new NeoForgeLoadContext(modEventBus);
-        Balm.initialize(GravelMiner.MOD_ID, context, GravelMiner::initialize);
+        Balm.initializeMod(GravelMiner.MOD_ID, context, GravelMiner::initialize);
     }
 
 }
