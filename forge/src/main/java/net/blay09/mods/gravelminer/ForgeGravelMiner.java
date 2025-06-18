@@ -11,7 +11,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 @Mod(GravelMiner.MOD_ID)
 public class ForgeGravelMiner {
     public ForgeGravelMiner(FMLJavaModLoadingContext context) {
-        final var loadContext = new ForgeLoadContext(context.getModEventBus());
+        final var loadContext = new ForgeLoadContext(context.getModBusGroup());
         Balm.initializeMod(GravelMiner.MOD_ID, loadContext, GravelMiner::initialize);
         if (FMLEnvironment.dist.isClient()) {
             BalmClient.initializeMod(GravelMiner.MOD_ID, loadContext, GravelMinerClient::initialize);
