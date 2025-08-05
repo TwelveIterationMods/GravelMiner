@@ -31,6 +31,7 @@ public class BlockBreakHandler {
         // Iterate through blocks upwards as long as gravel is found
         final int maxCount = 256;
         final int startY = pos.getY() + 1;
+        final var tool = player.getMainHandItem();
         for (int y = startY; y <= startY + maxCount; y++) {
             // Retrieve the block above the current position
             BlockPos posAbove = new BlockPos(pos.getX(), y, pos.getZ());
@@ -43,7 +44,7 @@ public class BlockBreakHandler {
 
             playBreakBlockEffects(level, posAbove, stateAbove);
 
-            if (!breakBlock(player, level, posAbove, stateAbove)) {
+            if (!breakBlock(player, level, posAbove, stateAbove, tool)) {
                 return;
             }
         }
@@ -54,7 +55,7 @@ public class BlockBreakHandler {
         level.levelEvent(null, blockBreakEvent, pos, Block.getId(state));
     }
 
-    private static boolean breakBlock(Player player, Level level, BlockPos pos, BlockState state) {
+    private static boolean breakBlock(Player player, Level level, BlockPos pos, BlockState state, ItemStack tool) {
         FluidState fluidState = level.getFluidState(pos);
         state.getBlock().playerWillDestroy(level, pos, state, player);
         boolean removedByPlayer = level.setBlock(pos, fluidState.createLegacyBlock(), level.isClientSide ? 11 : 3);
@@ -64,11 +65,7 @@ public class BlockBreakHandler {
 
         if (!player.getAbilities().instabuild) {
             state.getBlock().destroy(level, pos, state);
-            if (GravelMinerConfig.getActive().common.rollFlintChance || state.getBlock() != Blocks.GRAVEL) {
-                state.getBlock().playerDestroy(level, player, pos, state, level.getBlockEntity(pos), ItemStack.EMPTY);
-            } else {
-                Block.popResource(level, pos, new ItemStack(Blocks.GRAVEL, 1));
-            }
+            state.getBlock().playerDestroy(level, player, pos, state, level.getBlockEntity(pos), tool);
         }
 
         return true;

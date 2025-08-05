@@ -50,9 +50,6 @@ public class GravelMinerConfig {
 
         @Comment("If set to true, GravelMiner will only be active for users who install the mod on their clients (for use in servers).")
         public boolean isOptIn = true;
-
-        @Comment("If set to true, gravel mined via GravelMiner will have a chance of dropping as flint (server-side only).")
-        public boolean rollFlintChance = true;
     }
 
     public static class Client {

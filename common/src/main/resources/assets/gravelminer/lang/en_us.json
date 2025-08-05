@@ -11,8 +11,6 @@
   "gravelminer.configuration.common.triggerOnGravel.tooltip": "If set to true, the mod will trigger when mining gravel as well, instead of only when mining a non-gravel block below gravel.",
   "gravelminer.configuration.common.isOptIn": "Is Opt In",
   "gravelminer.configuration.common.isOptIn.tooltip": "If set to true, GravelMiner will only be active for users who install the mod on their clients (for use in servers).",
-  "gravelminer.configuration.common.rollFlintChance": "Roll Flint Chance",
-  "gravelminer.configuration.common.rollFlintChance.tooltip": "If set to true, gravel mined via GravelMiner will have a chance of dropping as flint (server-side only).",
   "gravelminer.configuration.client": "Client",
   "gravelminer.configuration.client.isEnabled": "Is Enabled",
   "gravelminer.configuration.client.isEnabled.tooltip": "Whether GravelMiner is currently enabled for this client (toggled via keybind)",
