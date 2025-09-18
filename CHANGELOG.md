@@ -1,3 +1,1 @@
-- Fixed custom loot tables for gravel being ignored when breaking gravel via GravelMiner
-- Fixed silk touch being ignored when breaking gravel via GravelMiner
-- Removed `rollFlintChance` option
+- Updated to Minecraft 1.21.9
