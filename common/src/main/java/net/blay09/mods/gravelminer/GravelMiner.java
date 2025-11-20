@@ -1,13 +1,14 @@
 package net.blay09.mods.gravelminer;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.event.BreakBlockEvent;
-import net.blay09.mods.balm.api.event.EventPriority;
-import net.blay09.mods.balm.api.event.PlayerLoginEvent;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.core.BalmRegistrars;
+import net.blay09.mods.balm.platform.event.EventPhases;
+import net.blay09.mods.balm.platform.event.callback.BlockCallback;
+import net.blay09.mods.balm.platform.event.callback.ServerPlayerCallback;
 import net.blay09.mods.gravelminer.network.HelloMessage;
 import net.blay09.mods.gravelminer.network.ModNetworking;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -22,13 +23,12 @@ public class GravelMiner {
 
     public static boolean isServerInstalled;
 
-    public static void initialize() {
+    public static void initialize(BalmRegistrars registrars) {
         GravelMinerConfig.initialize();
-        ModNetworking.initialize(Balm.getNetworking());
+        ModNetworking.initialize(Balm.networking());
 
-        Balm.getEvents().onEvent(PlayerLoginEvent.class, event -> Balm.getNetworking().sendTo(event.getPlayer(), HelloMessage.INSTANCE));
-
-        Balm.getEvents().onEvent(BreakBlockEvent.class, BlockBreakHandler::blockBroken, EventPriority.Lowest);
+        ServerPlayerCallback.Login.EVENT.register(player -> Balm.networking().sendTo(player, HelloMessage.INSTANCE));
+        BlockCallback.Break.EVENT.register(EventPhases.LOWEST, BlockBreakHandler::blockBroken);
     }
 
     public static boolean isAvailableFor(Player player) {
@@ -49,11 +49,11 @@ public class GravelMiner {
     }
 
     public static boolean isGravelBlock(BlockState state) {
-        ResourceLocation registryName = state != null ? BuiltInRegistries.BLOCK.getKey(state.getBlock()) : null;
+        Identifier registryName = state != null ? BuiltInRegistries.BLOCK.getKey(state.getBlock()) : null;
         return registryName != null && GravelMinerConfig.getActive().common.gravelBlocks.contains(registryName);
     }
 
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath(MOD_ID, path);
     }
 }

@@ -6,14 +6,14 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 public class HelloMessage implements CustomPacketPayload {
 
     public static final HelloMessage INSTANCE = new HelloMessage();
-    public static final Type<HelloMessage> TYPE = new Type<>(ResourceLocation.fromNamespaceAndPath(GravelMiner.MOD_ID, "hello"));
+    public static final Type<HelloMessage> TYPE = new Type<>(Identifier.fromNamespaceAndPath(GravelMiner.MOD_ID, "hello"));
     public static final StreamCodec<RegistryFriendlyByteBuf, HelloMessage> STREAM_CODEC = StreamCodec.unit(HelloMessage.INSTANCE);
 
     private HelloMessage() {

@@ -1,10 +1,10 @@
 package net.blay09.mods.gravelminer;
 
-import net.blay09.mods.balm.api.Balm;
-import net.blay09.mods.balm.api.config.reflection.Comment;
-import net.blay09.mods.balm.api.config.reflection.Config;
-import net.blay09.mods.balm.api.config.reflection.NestedType;
-import net.minecraft.resources.ResourceLocation;
+import net.blay09.mods.balm.Balm;
+import net.blay09.mods.balm.platform.config.reflection.Comment;
+import net.blay09.mods.balm.platform.config.reflection.Config;
+import net.blay09.mods.balm.platform.config.reflection.NestedType;
+import net.minecraft.resources.Identifier;
 
 import java.util.Set;
 
@@ -15,17 +15,16 @@ public class GravelMinerConfig {
     public Client client = new Client();
 
     public static GravelMinerConfig getActive() {
-        return Balm.getConfig().getActiveConfig(GravelMinerConfig.class);
+        return Balm.config().getActiveConfig(GravelMinerConfig.class);
     }
 
     public static void initialize() {
-        Balm.getConfig().registerConfig(GravelMinerConfig.class);
+        Balm.config().registerConfig(GravelMinerConfig.class);
     }
 
     public static void setEnabled(boolean enabled) {
-        Balm.getConfig().updateLocalConfig(GravelMinerConfig.class, config -> {
-            config.client.isEnabled = enabled;
-        });
+        Balm.config().updateLocalConfig(GravelMinerConfig.class, config
+                -> config.client.isEnabled = enabled);
     }
 
     public static GravelMinerClientSetting getClientSetting() {
@@ -41,9 +40,9 @@ public class GravelMinerConfig {
     }
 
     public static class Common {
-        @NestedType(ResourceLocation.class)
+        @NestedType(Identifier.class)
         @Comment("Blocks that will fall and break into items when hitting a non-solid block. Format: modid:name")
-        public Set<ResourceLocation> gravelBlocks = Set.of(ResourceLocation.withDefaultNamespace("gravel"));
+        public Set<Identifier> gravelBlocks = Set.of(Identifier.withDefaultNamespace("gravel"));
 
         @Comment("If set to true, the mod will trigger when mining gravel as well, instead of only when mining a non-gravel block below gravel.")
         public boolean triggerOnGravel = true;

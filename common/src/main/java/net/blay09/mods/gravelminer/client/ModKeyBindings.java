@@ -1,6 +1,6 @@
 package net.blay09.mods.gravelminer.client;
 
-import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.Balm;
 import net.blay09.mods.gravelminer.GravelMinerConfig;
 import net.blay09.mods.gravelminer.network.SetClientSettingMessage;
 import net.blay09.mods.kuma.api.Kuma;
@@ -17,7 +17,7 @@ public class ModKeyBindings {
                 .handleWorldInput(event -> {
                     boolean newEnabled = !GravelMinerConfig.getActive().client.isEnabled;
                     GravelMinerConfig.setEnabled(newEnabled);
-                    Balm.getNetworking().sendToServer(new SetClientSettingMessage(GravelMinerConfig.getClientSetting()));
+                    Balm.networking().sendToServer(new SetClientSettingMessage(GravelMinerConfig.getClientSetting()));
 
                     final var client = Minecraft.getInstance();
                     if (client.player != null) {
