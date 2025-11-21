@@ -27,8 +27,8 @@ public class GravelMiner {
         GravelMinerConfig.initialize();
         ModNetworking.initialize(Balm.networking());
 
-        ServerPlayerCallback.Login.EVENT.register(player -> Balm.networking().sendTo(player, HelloMessage.INSTANCE));
-        BlockCallback.Break.EVENT.register(EventPhases.LOWEST, BlockBreakHandler::blockBroken);
+        ServerPlayerCallback.Join.EVENT.register(player -> Balm.networking().sendTo(player, HelloMessage.INSTANCE));
+        BlockCallback.Break.Before.EVENT.register(EventPhases.LOWEST, BlockBreakHandler::blockBroken);
     }
 
     public static boolean isAvailableFor(Player player) {

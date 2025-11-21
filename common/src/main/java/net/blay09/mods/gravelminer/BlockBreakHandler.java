@@ -1,7 +1,6 @@
 package net.blay09.mods.gravelminer;
 
 import net.blay09.mods.balm.Balm;
-import net.blay09.mods.balm.platform.event.EventHandling;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -15,15 +14,15 @@ import org.jetbrains.annotations.Nullable;
 
 public class BlockBreakHandler {
 
-    public static EventHandling blockBroken(LevelAccessor level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, @Nullable Player player) {
+    public static boolean blockBroken(LevelAccessor level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, @Nullable Player player) {
         // Do not handle this event for fake players and players who do not have GravelMiner enabled.
         if (Balm.hooks().isFakePlayer(player) || !GravelMiner.isEnabledFor(player)) {
-            return EventHandling.RESUME;
+            return true;
         }
 
         // Do not handle this event for gravel blocks themselves, unless it's been enabled.
         if (!GravelMinerConfig.getActive().common.triggerOnGravel && GravelMiner.isGravelBlock(state)) {
-            return EventHandling.RESUME;
+            return true;
         }
 
         // Iterate through blocks upwards as long as gravel is found
@@ -37,17 +36,17 @@ public class BlockBreakHandler {
 
             // If the block at this position is not gravel, abort here
             if (!GravelMiner.isGravelBlock(stateAbove)) {
-                return EventHandling.RESUME;
+                return true;
             }
 
             playBreakBlockEffects(level, posAbove, stateAbove);
 
             if (!breakBlock(player, level, posAbove, stateAbove, tool)) {
-                return EventHandling.RESUME;
+                return true;
             }
         }
 
-        return EventHandling.RESUME;
+        return true;
     }
 
     private static void playBreakBlockEffects(LevelAccessor level, BlockPos pos, BlockState state) {
