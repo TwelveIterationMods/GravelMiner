@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       minecraft_version:
-        description: 'Minecraft Version'
+        description: 'Minecraft Version (default: this)'
         required: false
         type: string
 
@@ -12,7 +12,7 @@ jobs:
   call-update-version-branch:
     uses: TwelveIterations/PortingScripts/.github/workflows/update-version-branch.yml@v1
     with:
-      minecraft_version: ${{ inputs.minecraft_version }}
+      minecraft_version: ${{ inputs.minecraft_version || github.ref_name }}
       environment: Automations
     secrets:
       AUTOMATIONS_APP_ID: ${{ vars.AUTOMATIONS_APP_ID }}
