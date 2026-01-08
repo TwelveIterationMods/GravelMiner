@@ -13,6 +13,7 @@ jobs:
     uses: TwelveIterations/PortingScripts/.github/workflows/update-version-branch.yml@v1
     with:
       minecraft_version: ${{ inputs.minecraft_version }}
+      environment: Automations
     secrets:
       AUTOMATIONS_APP_ID: ${{ vars.AUTOMATIONS_APP_ID }}
       AUTOMATIONS_PRIVATE_KEY: ${{ secrets.AUTOMATIONS_PRIVATE_KEY }}
