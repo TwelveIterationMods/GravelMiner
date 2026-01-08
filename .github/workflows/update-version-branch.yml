@@ -10,7 +10,7 @@ on:
 
 jobs:
   call-update-version-branch:
-    uses: TwelveIterations/PortingScripts/.github/workflows/update-version-branch.yml
+    uses: TwelveIterations/PortingScripts/.github/workflows/update-version-branch.yml@v1
     with:
       minecraft_version: ${{ inputs.minecraft_version }}
     secrets:
