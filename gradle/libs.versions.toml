@@ -25,7 +25,7 @@ fabricLoader = { module = "net.fabricmc:fabric-loader", version.ref = "fabricLoa
 mixin = { module = "org.spongepowered:mixin", version = "0.8.7" }
 
 [plugins]
-fabricLoom = { id = "fabric-loom", version = "1.13-SNAPSHOT" }
+fabricLoom = { id = "net.fabricmc.fabric-loom", version = "1.14-SNAPSHOT" }
 modDevGradle = { id = "net.neoforged.moddev", version = "2.0.107" }
 forgeGradle = { id = "net.minecraftforge.gradle", version = "[6.0.25,6.2)" }
 mixin = { id = "org.spongepowered.mixin", version = "0.7-SNAPSHOT" }
