@@ -6,7 +6,7 @@ import net.blay09.mods.gravelminer.GravelMiner;
 import net.blay09.mods.gravelminer.client.GravelMinerClient;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
 import net.minecraft.client.KeyMapping;
 
 public class FabricGravelMinerClient implements ClientModInitializer {
@@ -15,6 +15,6 @@ public class FabricGravelMinerClient implements ClientModInitializer {
     public void onInitializeClient() {
         BalmClient.initializeMod(GravelMiner.MOD_ID, FabricLoadContext.INSTANCE, GravelMinerClient::initialize);
 
-        KeyBindingHelper.registerKeyBinding(new KeyMapping("", 0, null));
+        KeyMappingHelper.registerKeyBinding(new KeyMapping("", 0, null));
     }
 }
