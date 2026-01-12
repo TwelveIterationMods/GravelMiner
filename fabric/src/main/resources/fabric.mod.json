@@ -10,8 +10,8 @@
   ],
   "contact": {
     "homepage": "https://mods.twelveiterations.com/mc/gravelminer",
-    "sources": "https://github.com/TwelveIterationMods/GravelMiner",
-    "issues": "https://github.com/TwelveIterationMods/GravelMiner/issues"
+    "sources": "https://github.com/TwelveIterations/GravelMiner",
+    "issues": "https://github.com/TwelveIterations/GravelMiner/issues"
   },
 
   "license": "All Rights Reserved",
