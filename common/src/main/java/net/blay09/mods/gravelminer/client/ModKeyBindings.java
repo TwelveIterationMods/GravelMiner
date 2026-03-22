@@ -22,7 +22,7 @@ public class ModKeyBindings {
                     final var client = Minecraft.getInstance();
                     if (client.player != null) {
                         final MutableComponent message = Component.translatable("gravelminer.toggle" + (newEnabled ? "On" : "Off"));
-                        client.player.displayClientMessage(message, true);
+                        client.player.sendOverlayMessage(message);
                     }
                     return true;
                 })
