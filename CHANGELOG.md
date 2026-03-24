@@ -1,1 +1,1 @@
-- Fixed error log spam during config loading
+- Updated to Minecraft 26.1
