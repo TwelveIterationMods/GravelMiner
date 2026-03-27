@@ -1,4 +1,4 @@
 @NullMarked
-package net.blay09.mods.gravelminer.client;
+package net.blay09.mods.gravelminer.mixin;
 
 import org.jspecify.annotations.NullMarked;

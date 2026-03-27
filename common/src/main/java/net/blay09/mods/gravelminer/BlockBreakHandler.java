@@ -16,7 +16,7 @@ public class BlockBreakHandler {
 
     public static boolean blockBroken(LevelAccessor level, BlockPos pos, BlockState state, @Nullable BlockEntity blockEntity, @Nullable Player player) {
         // Do not handle this event for fake players and players who do not have GravelMiner enabled.
-        if (Balm.hooks().isFakePlayer(player) || !GravelMiner.isEnabledFor(player)) {
+        if (player == null || Balm.hooks().isFakePlayer(player) || !GravelMiner.isEnabledFor(player)) {
             return true;
         }
 

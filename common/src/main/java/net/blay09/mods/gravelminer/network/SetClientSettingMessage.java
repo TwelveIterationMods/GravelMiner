@@ -32,10 +32,8 @@ public record SetClientSettingMessage(GravelMinerClientSetting setting) implemen
     }
 
     public static void handle(ServerPlayer player, SetClientSettingMessage message) {
-        if (player != null) {
-            GravelMiner.setHasClientSide(player);
-            GravelMiner.setClientSetting(player, message.setting);
-        }
+        GravelMiner.setHasClientSide(player);
+        GravelMiner.setClientSetting(player, message.setting);
     }
 
     @Override

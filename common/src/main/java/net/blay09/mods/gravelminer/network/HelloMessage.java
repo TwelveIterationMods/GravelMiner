@@ -1,13 +1,10 @@
 package net.blay09.mods.gravelminer.network;
 
 import net.blay09.mods.gravelminer.GravelMiner;
-import net.blay09.mods.gravelminer.GravelMinerConfig;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.Identifier;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 
 public class HelloMessage implements CustomPacketPayload {

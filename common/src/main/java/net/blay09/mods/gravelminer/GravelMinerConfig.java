@@ -6,6 +6,7 @@ import net.blay09.mods.balm.platform.config.reflection.Config;
 import net.blay09.mods.balm.platform.config.reflection.NestedType;
 import net.minecraft.resources.Identifier;
 
+import java.util.Objects;
 import java.util.Set;
 
 @Config(GravelMiner.MOD_ID)
@@ -15,7 +16,7 @@ public class GravelMinerConfig {
     public Client client = new Client();
 
     public static GravelMinerConfig getActive() {
-        return Balm.config().getActiveConfig(GravelMinerConfig.class);
+        return Objects.requireNonNull(Balm.config().getActiveConfig(GravelMinerConfig.class));
     }
 
     public static void initialize() {

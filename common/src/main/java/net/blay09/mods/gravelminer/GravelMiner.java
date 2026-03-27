@@ -11,6 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -48,7 +49,7 @@ public class GravelMiner {
         clientSettings.put(player.getUUID(), setting);
     }
 
-    public static boolean isGravelBlock(BlockState state) {
+    public static boolean isGravelBlock(@Nullable BlockState state) {
         Identifier registryName = state != null ? BuiltInRegistries.BLOCK.getKey(state.getBlock()) : null;
         return registryName != null && GravelMinerConfig.getActive().common.gravelBlocks.contains(registryName);
     }
