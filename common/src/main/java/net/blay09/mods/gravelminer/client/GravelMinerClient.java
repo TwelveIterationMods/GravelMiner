@@ -4,6 +4,7 @@ import net.blay09.mods.balm.api.Balm;
 import net.blay09.mods.balm.api.client.BalmClient;
 import net.blay09.mods.balm.api.event.ConfigReloadedEvent;
 import net.blay09.mods.balm.api.event.client.ConnectedToServerEvent;
+import net.blay09.mods.gravelminer.GravelMiner;
 import net.blay09.mods.gravelminer.GravelMinerClientSetting;
 import net.blay09.mods.gravelminer.GravelMinerConfig;
 import net.blay09.mods.gravelminer.network.SetClientSettingMessage;
@@ -18,8 +19,10 @@ public class GravelMinerClient {
         });
 
         Balm.getEvents().onEvent(ConfigReloadedEvent.class, event -> {
-            GravelMinerClientSetting setting = GravelMinerConfig.getClientSetting();
-            Balm.getNetworking().sendToServer(new SetClientSettingMessage(setting));
+            if (event.getSchema().identifier().getNamespace().equals(GravelMiner.MOD_ID)) {
+                GravelMinerClientSetting setting = GravelMinerConfig.getClientSetting();
+                Balm.getNetworking().sendToServer(new SetClientSettingMessage(setting));
+            }
         });
     }
 }
