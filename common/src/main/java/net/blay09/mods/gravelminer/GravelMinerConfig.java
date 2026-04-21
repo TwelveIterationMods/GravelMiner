@@ -1,6 +1,7 @@
 package net.blay09.mods.gravelminer;
 
 import net.blay09.mods.balm.api.Balm;
+import net.blay09.mods.balm.common.config.ConfigLocalization;
 
 public class GravelMinerConfig {
     public static GravelMinerConfigData getActive() {
@@ -8,6 +9,7 @@ public class GravelMinerConfig {
     }
 
     public static void initialize() {
+        ConfigLocalization.enableModernTranslationKeys(GravelMiner.MOD_ID);
         Balm.getConfig().registerConfig(GravelMinerConfigData.class, null);
     }
 
