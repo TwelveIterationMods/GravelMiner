@@ -1,1 +1,2 @@
-- Fixed mod falsely being required on client on later Balm versions
+- Fixed config translation keys
+- Fixed error log spam when configs are loaded
