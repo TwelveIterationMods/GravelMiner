@@ -2,6 +2,8 @@ package net.blay09.mods.gravelminer;
 
 import net.blay09.mods.balm.Balm;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -66,8 +68,8 @@ public class BlockBreakHandler {
 
         if (!player.getAbilities().instabuild) {
             state.getBlock().destroy(levelAccessor, pos, state);
-            if (levelAccessor instanceof Level level) {
-                state.getBlock().playerDestroy(level, player, pos, state, levelAccessor.getBlockEntity(pos), tool);
+            if (levelAccessor instanceof ServerLevel serverLevel && player instanceof ServerPlayer serverPlayer) {
+                state.getBlock().playerDestroy(serverLevel, serverPlayer, pos, state, levelAccessor.getBlockEntity(pos), tool);
             }
         }
 
